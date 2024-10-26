@@ -83,6 +83,8 @@ class Expenses(db.Model):
 
 
 def dbinit():
+    
+
     db.drop_all()
     # Create a new user
     user = Users(username='user1', 
