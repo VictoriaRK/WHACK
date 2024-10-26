@@ -16,8 +16,10 @@ class Users(db.Model):
     __tablename__='users'
     username = db.Column(db.String(20), primary_key=True)
     password_hash = db.Column(db.String())
-    salt = db.Column(db.String())
+    fname = db.Column(db.String())
+    lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
+    debt_budget = db.Column(db.Numeric(10,2))
 
     def __init__(self, username, password, salt, email):
         self.username=username
@@ -53,6 +55,7 @@ class Debts(db.Model):
     dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
+    active = db.Column(db.Boolean)
     dclass = db.Column(db.String())
 
 

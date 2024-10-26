@@ -379,7 +379,7 @@ def editevent():
 # There is a button to see more events
 @app.route('/home')
 def home():
-  events = Events.query.all()
+  '''events = Events.query.all()
   count = 0
   booked_events = []
   new_events = []
@@ -402,7 +402,8 @@ def home():
       else:
         new_events.append(event)
         count += 1
-  return render_template("home.html", new_events=new_events, booked_events=booked_events)
+  return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
+  return render_template("index.html")
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -460,17 +461,14 @@ def register():
     email = request.form['email']
     fname = request.form['fname']
     lname = request.form['lname']
-    hashed_password = security.generate_password_hash(request.form['password'])
+    hashed_password = security.generate_password_hash(request.form['password'], method='pbkdf2:sha256', salt_length=16)
 
     tryusername = Users.query.filter_by(username=username).first()
     tryemail = Users.query.filter_by(username=email).first()
 
     if tryusername is None and tryemail is None:
-      new_user = Users(username=username, email=email, fname=fname, lname=lname, password_hash=hashed_password, is_super=False)
+      new_user = Users(username=username, email=email, fname=fname, lname=lname, password_hash=hashed_password)
       db.session.add(new_user)
-      db.session.commit()
-      log = Logs(user_id=new_user.id, action=f"Registerred")
-      db.session.add(log)
       db.session.commit()
       login_user(new_user)
       sendemail(recipients=[email], subject="Welcome to EventByte!", body=f'Hello {fname}, \nWe\'re so happy you\'ve joined the EventByte family!\nStart exploring new events today to find your next adventure.\nFrom The EventByte Team')
@@ -494,16 +492,10 @@ def login():
       if not security.check_password_hash(userbyname.password_hash, password):
         return render_template('log-in.html', failedlogin=True)
       login_user(userbyname)
-      log = Logs(user_id=current_user.id, action=f"Logged In")
-      db.session.add(log)
-      db.session.commit()
     if userbymail:
       if not security.check_password_hash(userbymail.password_hash, password):
         return render_template('log-in.html', failedlogin=True)
       login_user(userbymail)
-      log = Logs(user_id=current_user.id, action=f"Logged In")
-      db.session.add(log)
-      db.session.commit()
 
     return redirect('/home')
 
@@ -515,14 +507,14 @@ def login():
 @app.route('/log-out')
 @login_required
 def logout():
-    log = Logs(user_id=current_user.id, action=f"Logged Out")
-    db.session.add(log)
-    db.session.commit()
+    #log = Logs(user_id=current_user.id, action=f"Logged Out")
+    #db.session.add(log)
+    #db.session.commit()
     logout_user()
     return redirect('/home')
 
 
-#update logs in all other functions
+'''#update logs in all other functions
 #they are shown here
 @app.route('/show-logs')
 @login_required
@@ -530,13 +522,13 @@ def showlogs():
   if current_user.is_super:
     logs = Logs.query.all()
     return render_template('show-logs.html', logs=logs)
-  return render_template('/home')
+  return render_template('/home')'''
 
 
 
 
 #A query is sent with the searched value
-@app.route('/search', methods=['GET', 'POST'])
+'''@app.route('/search', methods=['GET', 'POST'])
 def search():
   query = request.form['query'].lower().replace(" ", "")
   print(query)
@@ -552,5 +544,5 @@ def searched():
   for event in events:
     if query in event.event_name.lower().replace(" ", "") or query in event.event_info.lower().replace(" ", ""):
       show_events.append(event)
-  return render_template('searched.html', events=show_events)
+  return render_template('searched.html', events=show_events)'''
 
