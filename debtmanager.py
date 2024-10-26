@@ -37,7 +37,7 @@ login_manager.login_view = "login"
 
 
 #db = SQLAlchemy(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///eventbyte.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///debts.sqlite'
 
 app.config['SQL_TRACK_MODIFICATIONS'] = True
 
