@@ -589,7 +589,7 @@ def add_income():
     db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
-  return render_template('add-expenses.html')
+  return render_template('add-income.html')
 
 
 
