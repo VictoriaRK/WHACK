@@ -529,7 +529,13 @@ def showlogs():
 
 
 
-
+@app.route('/debt-dash')
+@login_required
+def dept_dash():
+  debts = Debts.query.filter_by(username=current_user.username).all()
+  expense = Expenses.query.filter_by(username = current_user.username).first()
+  income = Incomes.query.filter_by(username = current_user.username).first()
+  return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
 
 
@@ -558,8 +564,10 @@ def add_debt():
 #adds the expense to the user account
 @app.route('add-expenses', methods=['GET', 'POST'])
 @login_required
-def add_debt():
+def add_expenses():
   if request.method == 'POST':
+    old = Expenses.query.filter_by(username = current_user.username).first()
+    db.session.delete(old)
     amount = float(request.form['amount'])
     debt = Expenses(current_user.id, name, amount, eclass) #TODO: properly populate
     db.session.add(debt)
@@ -571,8 +579,10 @@ def add_debt():
 #adds the expense to the user account
 @app.route('add-income', methods=['GET', 'POST'])
 @login_required
-def add_debt():
+def add_income():
   if request.method == 'POST':
+    old = Incomes.query.filter_by(username = current_user.username).first()
+    db.session.delete(old) 
     amount = float(request.form['income'])
     debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
     db.session.add(debt)
