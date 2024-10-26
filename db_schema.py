@@ -31,8 +31,8 @@ class Incomes(db.Model):
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
-    iclass = db.Column(db.String()) 
-    ranges = db.Column(db.ARRAY(db.Integer))
+    iclass = db.Column(db.String())          #monthly, yearly
+    ranges = db.Column(db.ARRAY(db.Integer)) #
 
     def __init__(self, username, name, amount, iclass, ranges):
         self.username=username
