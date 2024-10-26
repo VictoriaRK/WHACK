@@ -18,6 +18,7 @@ class Users(db.Model):
     password_hash = db.Column(db.String())
     salt = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
+    debt_budget=db.Column(db.Numeric(10,2))
 
     def __init__(self, username, password, salt, email):
         self.username=username
@@ -31,8 +32,8 @@ class Incomes(db.Model):
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
-    iclass = db.Column(db.String()) 
-    ranges = db.Column(db.ARRAY(db.Integer))
+    iclass = db.Column(db.String())          #monthly, yearly
+    ranges = db.Column(db.ARRAY(db.Integer)) #
 
     def __init__(self, username, name, amount, iclass, ranges):
         self.username=username
@@ -83,7 +84,8 @@ class Expenses(db.Model):
 
 
 def dbinit():
-
+    
+    db.drop_all()
     # Create a new user
     user = Users(username='user1', 
                  password_hash='hashed_password_example', 

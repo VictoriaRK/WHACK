@@ -23,6 +23,7 @@ from db_schema import db, Users, Incomes, Debts, Expenses, dbinit
 from barcode import EAN13
 from barcode.writer import ImageWriter 
 
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -521,6 +522,74 @@ def showlogs():
 
 
 
+
+
+
+
+
+
+
+@app.route('/debt-dash')
+@login_required
+def dept_dash():
+  debts = Debts.query.filter_by(username=current_user.username).all()
+  expense = Expenses.query.filter_by(username = current_user.username).first()
+  income = Incomes.query.filter_by(username = current_user.username).first()
+  return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
+
+
+
+
+
+
+#adds the debt as a debt in the Debts db
+
+@app.route('add-debt', methods=['GET', 'POST'])
+@login_required
+def add_debt():
+  if request.method == 'POST':
+    type = request.form['type']
+    amount = float(request.form['amount'])
+    interest = float(request.form['interest'])
+    min_monthly_pay = float(request.form['minimum-monthly-payment'])
+    due_date = request.form['due-date']
+    debt = Debts(current_user.id, name, amount, min_monthly_pay, interest, max_capacity, location, cancellable) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-debt.html')
+
+
+#adds the expense to the user account
+@app.route('add-expenses', methods=['GET', 'POST'])
+@login_required
+def add_expenses():
+  if request.method == 'POST':
+    old = Expenses.query.filter_by(username = current_user.username).first()
+    db.session.delete(old)
+    amount = float(request.form['amount'])
+    debt = Expenses(current_user.id, name, amount, eclass) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-expenses.html')
+
+#adds the expense to the user account
+@app.route('add-income', methods=['GET', 'POST'])
+@login_required
+def add_income():
+  if request.method == 'POST':
+    old = Incomes.query.filter_by(username = current_user.username).first()
+    db.session.delete(old) 
+    amount = float(request.form['income'])
+    debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-expenses.html')
 
 
 
