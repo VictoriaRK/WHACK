@@ -71,28 +71,15 @@ def resetdb():
 #route to the index
 @app.route('/')
 def index():
-  return redirect('/home')
+  return redirect('/log-in')
     # with open('README.md') as readme:
     #   with open('requirements.txt') as req:
     #     return render_template('index.html', README=readme.read(), requirements=req.read())
 
 
-# Makes the barcode
-def make_barcode(id):
-  output_filename = barcode_file_path(id)
-  code = EAN13(id)
-  code.save(output_filename)
-
-# Barcode file path
-def barcode_file_path(id):
-  return f"static/images/code{id}"
-
-
-
 
 #sends an email 
 def sendemail(recipients, subject, body):
-    #recipients = ["a.hague@warwick.ac.uk"]
     sender = f"{os.getlogin()}@dcs.warwick.ac.uk"
     mail.send_message(sender=("NOREPLY",sender),subject=subject,body=body,recipients=recipients)
     #return make_response(f"<html><body><p>Sending your message to {recipients}</p></body></html>",200)
@@ -535,22 +522,125 @@ def showlogs():
 
 
 
-#A query is sent with the searched value
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-  query = request.form['query'].lower().replace(" ", "")
-  print(query)
-  return redirect(f'/searched?query={query}')
 
-#If the searched value is contained in an event name or it's information, it is shown here.
-#Otherwise, it will inform the user that no events match this
-@app.route('/searched', methods=['GET', 'POST'])
-def searched():
-  query = request.args.get('query')
-  events = Events.query.all()
-  show_events = []
-  for event in events:
-    if query in event.event_name.lower().replace(" ", "") or query in event.event_info.lower().replace(" ", ""):
-      show_events.append(event)
-  return render_template('searched.html', events=show_events)
 
+""" @app.route('/timeline', methods=['GET', 'POST'])
+def create_user_with_debts():
+    # Create a new user
+    user = Users(username='user1', 
+                 password_hash='hashed_password_example', 
+                 salt='salt_value_example', 
+                 email='user1@example.com')
+
+    # Add the user to the session
+    db.session.add(user)
+
+    # Create different debts for the user
+    debts = [
+        Debts(username='user1', name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
+               accruedAnnualInterest=0.00, dclass='Auto'),
+        
+        Debts(username='user1', name='Student Loan', amount=15000.00, minPayment=300.00, interest=4.50, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
+               accruedAnnualInterest=0.00, dclass='Education'),
+        
+        Debts(username='user1', name='Credit Card', amount=5000.00, minPayment=150.00, interest=18.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
+               accruedAnnualInterest=0.00, dclass='Credit'),
+        
+        Debts(username='user1', name='Personal Loan', amount=10000.00, minPayment=250.00, interest=6.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
+               accruedAnnualInterest=0.00, dclass='Personal'),
+        
+        Debts(username='user1', name='Mortgage', amount=250000.00, minPayment=1200.00, interest=3.75, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
+               accruedAnnualInterest=0.00, dclass='Real Estate'),
+    ]
+
+    # Add each debt to the session
+    for debt in debts:
+        db.session.add(debt)
+
+    # Commit the session to save the user and debts in the database
+    db.session.commit() """
+
+
+@app.route('/timeline', methods=['GET', 'POST'])
+def findToPayOff():
+  debts=debts.query.filter(debts.user_id == current_user.id,debts.balance>0).order_by(accruedAnnualInterest.asc())
+  # Fetch  current user's budget directly from the User table
+  monthly_budget = Users.query.filter(User.id == current_user.id).first().monthly_budget
+
+  noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
+  return noMonthsNeeded
+
+
+
+
+
+  """
+    Calculates the number of months required to pay off all debts --> without changing values in the database.
+
+    Parameters:
+    - debts: all user debts
+    - monthly_budget (float): The amount available to pay off debts each month.
+
+    Returns:
+    - int: The number of months required to pay off all debts.
+     """
+def calculate_months_to_pay_off(debts, monthly_budget):
+
+    months = 0
+    # Retrieve debts from the database and make an in-memory copy of their balances and interest rates
+    
+    debt_data = [
+        {
+            'id': debt.id,
+            'balance': debt.balance,
+            'interest': debt.interest,
+            'effective_interest': debt.balance * debt.interest
+        }
+        for debt in debts
+    ]
+
+    # Loop until all debts are paid off
+    while any(debt['balance'] > 0 for debt in debt_data):
+        # Sort debts by the highest effective interest first
+        debt_data.sort(key=lambda x: x['effective_interest'], reverse=True)
+
+        # Start with the monthly budget for this month
+        budget = monthly_budget
+
+        # Pay off debts in order of highest effective interest
+        for debt in debt_data:
+            if debt['balance'] <= budget:
+                # Fully pay off this debt
+                budget -= debt['balance']
+                debt['balance'] = 0
+            else:
+                # Partially pay this debt
+                debt['balance'] -= budget
+                budget = 0  # Budget exhausted
+                break  # Exit loop if no budget is left
+
+        # Apply interest to remaining debts for the next month
+        for debt in debt_data:
+            if debt['balance'] > 0:
+                debt['balance'] *= (1 + debt['interest'])
+                debt['effective_interest'] = debt['balance'] * debt['interest']
+        
+        # Increment the month counter
+        months += 1
+
+    return months
