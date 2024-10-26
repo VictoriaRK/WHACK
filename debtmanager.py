@@ -554,7 +554,61 @@ def searched():
       show_events.append(event)
   return render_template('searched.html', events=show_events)
 
-@app.route('/findToPayOff', methods=['GET', 'POST'])
+
+
+@app.route('/timeline', methods=['GET', 'POST'])
+def create_user_with_debts():
+    # Create a new user
+    user = Users(username='user1', 
+                 password_hash='hashed_password_example', 
+                 salt='salt_value_example', 
+                 email='user1@example.com')
+
+    # Add the user to the session
+    db.session.add(user)
+
+    # Create different debts for the user
+    debts = [
+        Debts(username='user1', name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
+               accruedAnnualInterest=0.00, dclass='Auto'),
+        
+        Debts(username='user1', name='Student Loan', amount=15000.00, minPayment=300.00, interest=4.50, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
+               accruedAnnualInterest=0.00, dclass='Education'),
+        
+        Debts(username='user1', name='Credit Card', amount=5000.00, minPayment=150.00, interest=18.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
+               accruedAnnualInterest=0.00, dclass='Credit'),
+        
+        Debts(username='user1', name='Personal Loan', amount=10000.00, minPayment=250.00, interest=6.00, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
+               accruedAnnualInterest=0.00, dclass='Personal'),
+        
+        Debts(username='user1', name='Mortgage', amount=250000.00, minPayment=1200.00, interest=3.75, 
+               startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+               dueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
+               accruedAnnualInterest=0.00, dclass='Real Estate'),
+    ]
+
+    # Add each debt to the session
+    for debt in debts:
+        db.session.add(debt)
+
+    # Commit the session to save the user and debts in the database
+    db.session.commit()
+
+
+@app.route('/timeline', methods=['GET', 'POST'])
 def findToPayOff():
   debts=debts.query.filter(debts.user_id == current_user.id,debts.balance>0).order_by(accruedAnnualInterest.asc())
   # Fetch  current user's budget directly from the User table
@@ -578,7 +632,7 @@ def findToPayOff():
     - int: The number of months required to pay off all debts.
      """
 def calculate_months_to_pay_off(debts, monthly_budget):
-\
+
     months = 0
     # Retrieve debts from the database and make an in-memory copy of their balances and interest rates
     
