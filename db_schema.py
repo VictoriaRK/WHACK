@@ -52,8 +52,8 @@ class Debts(db.Model):
     minPayment = db.Column(db.Numeric(10,2))
     interest = db.Column(db.Numeric(5,2))
     startDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
-    chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) #optimistic user input
+    dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input - 
+    chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
     #accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
     dclass = db.Column(db.String()) #weekly, monthly etc
 
