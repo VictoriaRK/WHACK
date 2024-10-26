@@ -19,7 +19,6 @@ body {
    color: red;
    border-radius: 40px;
    padding: 10px;
-   margin-top: 0;
    
 
 }
@@ -27,6 +26,7 @@ body {
 h1 {
     text-align: center;
     color: red; 
+    margin: 10px;
 }
 
 h1 {
@@ -36,31 +36,62 @@ h1 {
 
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
     width: 100%;
     padding: 10px;
-    margin: 5px 0;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 40px;
     box-sizing: border-box;
-    background: transparent;
+    background: transparent; /* Transparent background */
     font-size: 16px;
-    color: red; 
+    color: red; /* Input text color */
 }
 
-input[placeholder="text"],
-input[placeholder="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 40px;
-    box-sizing: border-box;
-    background: transparent;
-    font-size: 16px;
-    color: red; 
-    
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder {
+    color: rgba(105, 105, 105, 0.7); /* Dark grey color with 70% opacity */
+    font-size: 14px;
+}
 
+
+.links-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between links */
+    margin: 20px 0; /* Optional: Add vertical spacing */
+    align-items: center; /* Vertically align items in the center */
+}
+
+.reset-password,
+.no-account {
+    margin: 0; /* Remove default margin for cleaner alignment */
+}
+
+.reset-password a,
+.no-account a {
+    color: #1F2731; /* Text color */
+    text-decoration: none; /* Remove underline by default */
+}
+
+.reset-password a:hover,
+.no-account a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+input[type="submit"] {
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+    margin-top: 40px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    background: red;
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
 }
 
 
