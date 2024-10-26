@@ -37,4 +37,4 @@ fi
 source vcwk/bin/activate
 
 # run Flask 
-./run.sh eventmanager
+./run.sh debtmanager
