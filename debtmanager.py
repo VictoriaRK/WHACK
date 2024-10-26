@@ -83,7 +83,7 @@ def sendemail(recipients, subject, body):
     sender = f"{os.getlogin()}@dcs.warwick.ac.uk"
     mail.send_message(sender=("NOREPLY",sender),subject=subject,body=body,recipients=recipients)
     #return make_response(f"<html><body><p>Sending your message to {recipients}</p></body></html>",200)
-
+'''
 #an event is added. Only the super user can add an event. They set the Event attributes as those from the form (validated via the HTML)
 #The event is emailed to the super user as confirmation
 @app.route('/add-event', methods=['GET', 'POST'])
@@ -358,9 +358,7 @@ def editevent():
     max_capacity=event.max_capacity,
     location = event.location,
     cancellable=event.cancellable
-  )
-
-
+  )'''
 
 # show some of their events and some of the events they haven't booked
 # There is a button to see more events
@@ -589,9 +587,9 @@ def create_user_with_debts():
 
 @app.route('/timeline', methods=['GET', 'POST'])
 def findToPayOff():
-  debts=debts.query.filter(debts.user_id == current_user.id,debts.balance>0).order_by(accruedAnnualInterest.asc())
+  debts=Debts.query.filter_by(username = "user1").order_by(Debts.accruedAnnualInterest.asc())
   # Fetch  current user's budget directly from the User table
-  monthly_budget = Users.query.filter(User.id == current_user.id).first().monthly_budget
+  monthly_budget = Users.query.filter_by(id=0).first().debt_budget
 
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
   return noMonthsNeeded
