@@ -17,7 +17,7 @@ class Users(db.Model):
     username = db.Column(db.String(20), primary_key=True)
     password_hash = db.Column(db.String())
     salt = db.Column(db.String())
-    email = db.Column(db.String(),db.UNIQUE)
+    email = db.Column(db.String(), unique=True)
 
     def __init__(self, username, password, salt, email):
         self.username=username
@@ -26,7 +26,7 @@ class Users(db.Model):
         self.email=email
 
 
-class incomes(db.Model):
+class Incomes(db.Model):
     __tablename__='incomes'
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
     name = db.Column(db.String(20), primary_key=True)
@@ -48,7 +48,7 @@ class Debts(db.Model):
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
     minPayment = db.Column(db.Numeric(10,2))
-    interest = db.column(db.Numeric(5,2))
+    interest = db.Column(db.Numeric(5,2))
     startDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -71,9 +71,9 @@ class Debts(db.Model):
 class Expenses(db.Model):
     __tablename__='expenses'
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
-    name = db.column(db.String(20), primary_key=True)
-    amount = db.Column(db.Column(db.Numeric(10,2)))
-    eclass = db.column(db.String())
+    name = db.Column(db.String(20), primary_key=True)
+    amount = db.Column(db.Numeric(10,2))
+    eclass = db.Column(db.String())
 
     def __init__(self, username, name, amount, eclass):
         self.username=username
