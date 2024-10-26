@@ -524,7 +524,7 @@ def showlogs():
 
 
 
-@app.route('/timeline', methods=['GET', 'POST'])
+""" @app.route('/timeline', methods=['GET', 'POST'])
 def create_user_with_debts():
     # Create a new user
     user = Users(username='user1', 
@@ -573,7 +573,7 @@ def create_user_with_debts():
         db.session.add(debt)
 
     # Commit the session to save the user and debts in the database
-    db.session.commit()
+    db.session.commit() """
 
 
 @app.route('/timeline', methods=['GET', 'POST'])
