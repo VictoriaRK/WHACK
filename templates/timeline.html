@@ -15,8 +15,30 @@
 
                 <h1></h1>
 				<div class='spacer'></div>
-                <form action='simulation' method ='GET'>
-                    <!-- if goal stored, show graph timeline -->
+				<form action='simulation' method ='GET'>
+                    <!-- {%if curent_user.is_authenticated%} -->
+					<h2>No. Months til you are Debt Free</h2>
+					<button id="calculateButton">Calculate</button>
+					
+					<div id="message"></div>
+				
+					<script>
+						document.getElementById('calculateButton').addEventListener('click', function() {
+							const userId = 1;  // Replace with the actual user ID
+							fetch(`/calculate_months`)
+								.then(response => response.json())
+								.then(data => {
+									const messageDiv = document.getElementById('message');
+									messageDiv.innerText = `Debt-free in ${data.months} months!`;
+									messageDiv.style.display = 'block'; // Show the message
+								})
+								.catch(error => {
+									console.error('Error fetching data:', error);
+								});
+						});
+					</script>
+					<!-- {%end if%} -->
+					<!-- if goal stored, show graph timeline -->
                      <!-- if not, redirect to debt dashboard to input data -->
                 </form>
             </div>
