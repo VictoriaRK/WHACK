@@ -14,15 +14,21 @@
                 <h1>Register Today</h1>
 				<div class='spacer'></div>
                 <form action='debt-input' method ='POST'>
-                    <!-- show all debts -->
                      <!-- add debt -->
                       <!-- add income - if already in there tell them it will modify -->
+                       <!--  -->
                     <h2>Enter details:</h2>
-                    <p><label for="type">Type of Debt:</label> <input type = "text" name = "username" required/></p>
-                    <p><label for="amount">Email:</label> <input type = "email" name = "email" required/></p>
-                    <p><label for="interest">First Name:</label> <input type = "text" name = "fname" required/></p>
-                    <p><label for="minimum-monthly-payment">Last Name:</label> <input type = "text" name = "lname" required/></p>
-                    <p><label for="due-date">Password:</label><input type = "password" name = "password" minlength="8" required/></p>
+                    <select id="type" name="type"> <label for="type">
+                        <option value="credit">Credit Card Balances</option>
+                        <option value="student">Student Loans</option>
+                        <option value="personal">Personal Loans</option>
+                        <option value="mortgage">Mortgage</option>
+                        <option value="other">Other</option>
+                      </select>
+                    <p><label for="amount">Amount:</label> <input type = "number" name = "amount" placeholder="0.0" step="0.01" min="0" required/></p>
+                    <p><label for="interest">Percentage Interest:</label> <input type = "number" name = "interest" placeholder="0.0" step="0.01" min="0" required/></p>
+                    <p><label for="minimum-monthly-payment">Minimum Monthly Payment:</label> <input type = "number" placeholder="0.0" step="0.01" min="0" name = "minimum-monthly-payment" required/></p>
+                    <p><label for="due-date">Due Date:</label><input type = "date" name = "due-date" required/></p>
                     <p><input type = "submit" value = "Add Debt" /></p>
                 </form>
             </div>

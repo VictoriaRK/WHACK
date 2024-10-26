@@ -11,20 +11,31 @@
 
 			<div id='content'>
 
-                <h1>Register Today</h1>
-				<div class='spacer'></div>
-                <form action='debt-input' method ='POST'>
-                    <!-- show all debts -->
-                     <!-- add debt -->
-                      <!-- add income - if already in there tell them it will modify -->
-                    <h2>Enter details:</h2>
-                    <p><label for="debt-type">Type of Debt:</label> <input type = "text" name = "username" required/></p>
-                    <p><label for="email">Email:</label> <input type = "email" name = "email" required/></p>
-                    <p><label for="fname">First Name:</label> <input type = "text" name = "fname" required/></p>
-                    <p><label for="lname">Last Name:</label> <input type = "text" name = "lname" required/></p>
-                    <p><label for="password">Password:</label><input type = "password" name = "password" minlength="8" required/></p>
-                    <p><input type = "submit" value = "Create Account" /></p>
-                </form>
+                <h1>Debt Dashboard</h1>
+                <!-- show all debts -->
+                {% for debt in debts %}
+                <div id="debts">
+
+                </div>
+                {% endfor %}
+
+                <div id="income">
+
+                </div>
+
+                <!-- add debt -->
+                <!-- redirect to add debt-->
+                <button> <a href="{{ url_for('add-debt') }}">Add Debt</a></button>
+                 
+
+                <!-- add income -->
+                 <!-- here notify if they have an income it will be overwritten -->
+                  <!-- redirect to add-income -->
+                <button> <a href="{{ url_for('add-income') }}">Add Debt</a></button>
+
+
+                <!-- button to redirect to timeline -->
+
             </div>
 		</div>
 	</body>
