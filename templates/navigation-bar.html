@@ -1,0 +1,23 @@
+<nav>
+	<ul>
+		<li><a href='/home'>Home</a></li>
+        <li><a href="all-events">All Events</a></li>
+    {%
+      if current_user.is_authenticated
+      %}
+      
+      <li><a href="budgeting-tips">Budgeting Tips</a></li>
+      <li><a href="budgeting-tips">Debt Dashboard</a></li>
+      <li><a href="simulation">Budget Timeline</a></li>
+
+      {% endif %}
+
+      <li><a href='log-out'>Log Out</a></li>					
+    {% else %}
+		<li><a href='log-in'>Log In</a></li>
+		<li><a href='register'>Register</a></li>
+    {% endif %}
+    <li style="float: right; padding-right: 20px;">{% include "search.html" %}</li>
+	</ul>
+</nav>
+

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="static/css/main.css" type="text/css" media="all" charset="utf-8">
+        <title>Debt Dashboard</title>
+	</head>
+	<body>
+        <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+		<div id='content_wrapper'>
+			{% include "navigation-bar.html" %}
+
+			<div id='content'>
+
+                <h1>Register Today</h1>
+				<div class='spacer'></div>
+                <form action='income-input' method ='POST'>
+                      <!-- add income - if already in there tell them it will modify -->
+                    <h2>Enter details:</h2>
+                    <p><label for="debt-type">Type of Debt:</label> <input type = "text" name = "username" required/></p>
+                    <p><label for="email">Email:</label> <input type = "email" name = "email" required/></p>
+                    <p><label for="fname">First Name:</label> <input type = "text" name = "fname" required/></p>
+                    <p><label for="lname">Last Name:</label> <input type = "text" name = "lname" required/></p>
+                    <p><label for="password">Password:</label><input type = "password" name = "password" minlength="8" required/></p>
+                    <p><input type = "submit" value = "Create Account" /></p>
+                </form>
+            </div>
+		</div>
+	</body>
+</html>
