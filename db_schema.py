@@ -18,6 +18,7 @@ class Users(db.Model):
     password_hash = db.Column(db.String())
     salt = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
+    debt_budget=db.Column(db.Numeric(10,2))
 
     def __init__(self, username, password, salt, email):
         self.username=username
