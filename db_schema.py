@@ -35,8 +35,8 @@ class Incomes(db.Model):
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
-    iclass = db.Column(db.String())
-    ranges = db.Column(db.String())
+    iclass = db.Column(db.String()) #weekly / monthly / yearly
+    ranges = db.Column(db.String()) #used to store range when user receives income e.g. if on months 1-3, 5-7, ranges would be "1-3,5-7" or something
 
     def __init__(self, username, name, amount, iclass, ranges):
         self.username=username
@@ -58,7 +58,7 @@ class Debts(db.Model):
     chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
     active = db.Column(db.Boolean)
-    dclass = db.Column(db.String())
+    dclass = db.Column(db.String()) #weekly / monthly / yearly
 
 
     def __init__(self, username, name, amount, minPayment, interest, startDate, dueDate, chosenDueDate, accruedAnnualInterest, dclass):
@@ -78,7 +78,7 @@ class Expenses(db.Model):
     username = db.Column(db.String(20), db.ForeignKey("users.username"), primary_key=True)
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
-    eclass = db.Column(db.String())
+    eclass = db.Column(db.String()) #weekly / monthly / yearly
 
     def __init__(self, username, name, amount, eclass):
         self.username=username

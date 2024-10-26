@@ -437,8 +437,8 @@ def save_password_reset():
 # If they do not, the details are saved, and an email is sent.
 @app.route('/register', methods=["GET", "POST"])
 def register():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method=="GET":
     return render_template("register.html")
@@ -465,8 +465,8 @@ def register():
 # The user can log in via email or username so they are both checked.
 @app.route('/log-in', methods=["GET", "POST"])
 def login():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method == "POST":
     name = request.form['name']
@@ -488,7 +488,7 @@ def login():
 
   if request.method=="GET":
     return render_template('log-in.html', failedlogin=False)
-    
+
 
 #logs out the user
 @app.route('/log-out')
