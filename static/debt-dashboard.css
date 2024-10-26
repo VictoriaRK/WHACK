@@ -1,0 +1,116 @@
+/* main.css */
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f5f6fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Content Wrapper */
+#content_wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Bar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #1e90ff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #1c86e5;
+}
+
+/* Headings */
+h1 {
+    font-size: 2rem;
+    color: #1e90ff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Debt Section */
+#debts, #income {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f9fafc;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#debts h2, #income h2 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Add Button Styling */
+button {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1e90ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button a {
+    color: #fff;
+    text-decoration: none;
+}
+
+button:hover {
+    background-color: #1c86e5;
+}
+
+/* Responsive Layout */
+@media (max-width: 600px) {
+    #content_wrapper {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    button {
+        width: 100%;
+        text-align: center;
+    }
+}

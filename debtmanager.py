@@ -71,28 +71,15 @@ def resetdb():
 #route to the index
 @app.route('/')
 def index():
-  return redirect('/home')
+  return redirect('/log-in')
     # with open('README.md') as readme:
     #   with open('requirements.txt') as req:
     #     return render_template('index.html', README=readme.read(), requirements=req.read())
 
 
-# Makes the barcode
-def make_barcode(id):
-  output_filename = barcode_file_path(id)
-  code = EAN13(id)
-  code.save(output_filename)
-
-# Barcode file path
-def barcode_file_path(id):
-  return f"static/images/code{id}"
-
-
-
 
 #sends an email 
 def sendemail(recipients, subject, body):
-    #recipients = ["a.hague@warwick.ac.uk"]
     sender = f"{os.getlogin()}@dcs.warwick.ac.uk"
     mail.send_message(sender=("NOREPLY",sender),subject=subject,body=body,recipients=recipients)
     #return make_response(f"<html><body><p>Sending your message to {recipients}</p></body></html>",200)
