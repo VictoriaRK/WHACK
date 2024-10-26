@@ -1,0 +1,66 @@
+* { 
+    margin: 0; 
+    padding:0; 
+    box-sizing: border-box; 
+    font-family: "Poppins", sans-serif; 
+}
+
+body {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1F2731;
+}
+
+#content_wrapper {
+   width: 420px; 
+   background: white;
+   color: red;
+   border-radius: 40px;
+   padding: 10px;
+   
+
+}
+
+h1 {
+    text-align: center;
+    color: red; 
+}
+
+h1 {
+    text-align: center;
+    color: red; 
+}
+
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    box-sizing: border-box;
+    background: transparent;
+    font-size: 16px;
+    color: red; 
+}
+
+input[placeholder="text"],
+input[placeholder="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    box-sizing: border-box;
+    background: transparent;
+    font-size: 16px;
+    color: red; 
+    
+
+}
+
+
+
