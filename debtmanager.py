@@ -71,28 +71,15 @@ def resetdb():
 #route to the index
 @app.route('/')
 def index():
-  return redirect('/home')
+  return redirect('/log-in')
     # with open('README.md') as readme:
     #   with open('requirements.txt') as req:
     #     return render_template('index.html', README=readme.read(), requirements=req.read())
 
 
-# Makes the barcode
-def make_barcode(id):
-  output_filename = barcode_file_path(id)
-  code = EAN13(id)
-  code.save(output_filename)
-
-# Barcode file path
-def barcode_file_path(id):
-  return f"static/images/code{id}"
-
-
-
 
 #sends an email 
 def sendemail(recipients, subject, body):
-    #recipients = ["a.hague@warwick.ac.uk"]
     sender = f"{os.getlogin()}@dcs.warwick.ac.uk"
     mail.send_message(sender=("NOREPLY",sender),subject=subject,body=body,recipients=recipients)
     #return make_response(f"<html><body><p>Sending your message to {recipients}</p></body></html>",200)
@@ -534,25 +521,6 @@ def showlogs():
 
 
 
-
-#A query is sent with the searched value
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-  query = request.form['query'].lower().replace(" ", "")
-  print(query)
-  return redirect(f'/searched?query={query}')
-
-#If the searched value is contained in an event name or it's information, it is shown here.
-#Otherwise, it will inform the user that no events match this
-@app.route('/searched', methods=['GET', 'POST'])
-def searched():
-  query = request.args.get('query')
-  events = Events.query.all()
-  show_events = []
-  for event in events:
-    if query in event.event_name.lower().replace(" ", "") or query in event.event_info.lower().replace(" ", ""):
-      show_events.append(event)
-  return render_template('searched.html', events=show_events)
 
 @app.route('/findToPayOff', methods=['GET', 'POST'])
 def findToPayOff():

@@ -2,23 +2,58 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="../static/main.css" type="text/css" media="all" charset="utf-8">
-        <title>Debt Dashboard</title>
+		<link rel="stylesheet" href="../static/add-debt.css" type="text/css" media="all" charset="utf-8">
+
+        <title>Add Debt</title>
+
 	</head>
 	<body>
         <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
-		<div id='content_wrapper'>
+		
+        
+        
+        
+        
+        <div id='content_wrapper'>
+
+
+            <nav>
+                <ul>
+                    <li><a href='/home'>Home</a></li>
+                    <li><a href="all-events">All Events</a></li>
+                {%
+                  if current_user.is_authenticated
+                  %}
+                  
+                  <li><a href="budgeting-tips">Budgeting Tips</a></li>
+                  <li><a href="budgeting-tips">Debt Dashboard</a></li>
+                  <li><a href="simulation">Budget Timeline</a></li>
+                    
+                  {% endif %}
+                    
+                  <li><a href='log-out'>Log Out</a></li>					
+                {% else %}
+                    <li><a href='log-in'>Log In</a></li>
+                    <li><a href='register'>Register</a></li>
+                {% endif %}
+                <li style="float: right; padding-right: 20px;">{% include "search.html" %}</li>
+                </ul>
+            </nav>
+
+
+            
 			{% include "navigation-bar.html" %}
 
 			<div id='content'>
 
-                <h1>Register Today</h1>
+                <h1>Add Debt</h1>
 				<div class='spacer'></div>
                 <form action='debt-input' method ='POST'>
                      <!-- add debt -->
                       <!-- add income - if already in there tell them it will modify -->
                        <!--  -->
-                    <h2>Enter details:</h2>
-                    <select id="type" name="type"> <label for="type">
+                       <label for="type">Type of Debt:</label>
+                    <select id="type" name="type"> 
                         <option value="credit">Credit Card Balances</option>
                         <option value="student">Student Loans</option>
                         <option value="personal">Personal Loans</option>
