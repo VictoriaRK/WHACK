@@ -12,19 +12,21 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 db = SQLAlchemy()
 
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     __tablename__='users'
-    username = db.Column(db.String(20), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True)
     password_hash = db.Column(db.String())
     fname = db.Column(db.String())
     lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
-    debt_budget = db.Column(db.Numeric(10,2))
-
-    def __init__(self, username, password, salt, email):
+    debt_budget = db.Column(db.Numeric(10,2), default=0.0)
+                         
+    def __init__(self, username, password_hash, fname, lname, email):
         self.username=username
-        self.password=password
-        self.salt=salt
+        self.password_hash=password_hash
+        self.fname=fname
+        self.lname=lname
         self.email=email
 
 
@@ -34,7 +36,7 @@ class Incomes(db.Model):
     name = db.Column(db.String(20), primary_key=True)
     amount = db.Column(db.Numeric(10,2))
     iclass = db.Column(db.String()) 
-    ranges = db.Column(db.ARRAY(db.Integer))
+    ranges = db.Column(db.String())
 
     def __init__(self, username, name, amount, iclass, ranges):
         self.username=username

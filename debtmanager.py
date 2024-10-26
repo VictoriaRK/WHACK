@@ -570,7 +570,7 @@ def findToPayOff():
     - int: The number of months required to pay off all debts.
      """
 def calculate_months_to_pay_off(debts, monthly_budget):
-\
+
     months = 0
     # Retrieve debts from the database and make an in-memory copy of their balances and interest rates
     
