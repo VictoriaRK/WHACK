@@ -531,14 +531,13 @@ def dept_dash():
 def add_debt():
   if request.method == 'POST':
     name = request.form['name']    
-    pclass = request.form['pclass']
+    #pclass = request.form['pclass']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
     chosen_due_date = request.form['chosen-due-date']
     start_date = request.form['start-date']
-    due_date=request.form['due-date']
-    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date, accruedAnnualInterest=0.0)#max_capacity, location, cancellable) #TODO: properly populate
+    #due_date=request.form['due-date']
     debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate=10, chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
@@ -585,17 +584,15 @@ def add_income():
 @app.route('/delete-income', methods=['POST'])
 @login_required
 def delete_income():
-   amount = float(request.form['amount'])
-   name = request.form['name']
-
-   record = Incomes.query.filter_by(id=current_user.id, name = name).first()
+   #amount = float(request.form['amount'])
+   record = Incomes.query.filter_by(id=current_user.id).first()
    db.session.delete(record)
    return redirect('/debt-dashboard')
 
 @app.route('/delete-expense', methods=['POST'])
 @login_required
 def delete_expense():
-   amount = float(request.form['amount'])
+   #amount = float(request.form['amount'])
    name = request.form['name']
 
    record = Expenses.query.filter_by(id=current_user.id, name = name).first()
@@ -605,7 +602,7 @@ def delete_expense():
 @app.route('/delete-debt', methods=['POST'])
 @login_required
 def delete_debt():
-   amount = float(request.form['amount'])
+   #amount = float(request.form['amount'])
    name = request.form['name']
 
    record = Debts.query.filter_by(id=current_user.id, name = name).first()

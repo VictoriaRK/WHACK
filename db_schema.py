@@ -61,7 +61,7 @@ class Debts(db.Model):
     # dclass = db.Column(db.String()) #weekly, monthly etc
 
 
-    def __init__(self, id, name, amount, minPayment, interest, startDate, dueDate, chosenDueDate, accruedAnnualInterest):
+    def __init__(self, id, name, amount, minPayment, interest, startDate, dueDate, chosenDueDate):
         self.id=id
         self.name=name
         self.amount=amount
@@ -70,7 +70,7 @@ class Debts(db.Model):
         self.startDate=startDate
         self.dueDate=dueDate
         self.chosenDueDate=chosenDueDate
-        self.accruedAnnualInterest=accruedAnnualInterest
+        #self.accruedAnnualInterest=accruedAnnualInterest
 
 class Expenses(db.Model):
     __tablename__='expenses'
