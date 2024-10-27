@@ -27,25 +27,11 @@
                      <!-- add debt -->
                       <!-- add income - if already in there tell them it will modify -->
                        <!--  -->
-                       <label for="type">Type of Debt:</label>
-                    <select id="type" name="type"> 
-                        <option value="credit">Credit Card Balances</option>
-                        <option value="student">Student Loans</option>
-                        <option value="personal">Personal Loans</option>
-                        <option value="mortgage">Mortgage</option>
-                        <option value="other">Other</option>
-                      </select>
                     <p><label for="amount">Amount:</label> <input type = "number" name = "amount" placeholder="0.0" step="0.01" min="0" required/></p>
                     <p><label for="interest">Percentage Interest:</label> <input type = "number" name = "interest" placeholder="0.0" step="0.01" min="0" required/></p>
                     <p><label for="minimum-monthly-payment">Minimum Monthly Payment:</label> <input type = "number" placeholder="0.0" step="0.01" min="0" name = "minimum-monthly-payment" required/></p>
                     <p><label for="start-date">Start Date:</label><input type = "date" name = "start-date"/></p>
                     <p><label for="chosen-due-date">Chosen Due Date:</label><input type = "date" name = "chosen-due-date"/></p>
-                    <label for="pclass">Payment Frequency:</label>
-                    <select id="pclass" name="pclass"> 
-                        <option value="week">Weekly</option>
-                        <option value="month">Monthly</option>
-                        <option value="year">Annually</option>
-                      </select>
                     <p><input type = "submit" value = "Add Debt" /></p>
                 </form>
             </div>
