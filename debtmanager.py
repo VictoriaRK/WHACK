@@ -570,7 +570,7 @@ def add_income():
     old = Incomes.query.filter_by(id = current_user.id).first()
     if not old is None:
       db.session.delete(old) 
-    amount = float(request.form['income'])
+    amount = float(request.form['amount'])
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
     db.session.commit()
