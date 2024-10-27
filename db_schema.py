@@ -92,7 +92,7 @@ def dbinit():
     # Create a new user
     user = Users(username='user1', 
                  password_hash='password', 
-                 email='user1@example.com', fname="bleh", lname='blah')
+                 email='user1@example.com',debt_budget=500, fname="bleh", lname='blah')
 
     user = Users(username='abc', 
                  password_hash='abc', 
