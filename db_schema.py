@@ -102,37 +102,38 @@ def dbinit():
     record.debt_budget = 50000
     db.session.commit()
 
+#accruedAnnualInterest=0.00
     # Create different debts for the user
     debts = [
         Debts(id=0, name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
                chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
-               accruedAnnualInterest=0.00),
+               ),
         
         Debts(id=0, name='Student Loan', amount=15000.00, minPayment=300.00, interest=4.50, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
                chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
-               accruedAnnualInterest=0.00),
+               ),
         
         Debts(id=0, name='Credit Card', amount=5000.00, minPayment=150.00, interest=18.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
                chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
-               accruedAnnualInterest=0.00),
+               ),
         
         Debts(id=0, name='Personal Loan', amount=10000.00, minPayment=250.00, interest=6.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
                chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
-               accruedAnnualInterest=0.00),
+               ),
         
         Debts(id=0, name='Mortgage', amount=250000.00, minPayment=1200.00, interest=3.75, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
                chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
-               accruedAnnualInterest=0.00),
+               ),
     ]
 
     # Add each debt to the session
