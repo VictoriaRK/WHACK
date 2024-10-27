@@ -397,6 +397,11 @@ def home():
 def dashboard():
    return render_template("debt-dashboard.html")
 
+@app.route('/simulation')
+@login_required
+def timeline():
+   return render_template("timeline.html")
+
 
 
 
@@ -521,9 +526,9 @@ def showlogs():
 @app.route('/debt-dash')
 @login_required
 def dept_dash():
-  debts = Debts.query.filter_by(username=current_user.username).all()
-  expense = Expenses.query.filter_by(username = current_user.username).first()
-  income = Incomes.query.filter_by(username = current_user.username).first()
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  expense = Expenses.query.filter_by(id=current_user.id).first()
+  income = Incomes.query.filter_by(id=current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
 
@@ -571,9 +576,11 @@ def add_expenses():
 @login_required
 def add_income():
   if request.method == 'POST':
-    old = Incomes.query.filter_by(username = current_user.username).first()
-    db.session.delete(old) 
+    '''old = Incomes.query.filter_by(username = current_user.username).first()
+    db.session.delete(old)'''
     amount = float(request.form['income'])
+    name = request.form['name']
+
     debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
