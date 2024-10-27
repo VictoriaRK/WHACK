@@ -20,7 +20,7 @@ class Users(db.Model, UserMixin):
     fname = db.Column(db.String())
     lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
-    # debt_budget = db.Column(db.Numeric(10,2))
+    debt_budget = db.Column(db.Numeric(10,2))
                          
     def __init__(self, username, password_hash, fname, lname, email):
         self.username=username
@@ -34,7 +34,7 @@ class Incomes(db.Model):
     __tablename__='incomes'
     id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     # name = db.Column(db.String(20), primary_key=True)
-    amount = db.Column(db.Numeric(10,2))
+    amount = db.Column(db.Numeric(10,2), default=0.0)
     # iclass = db.Column(db.String()) #weekly / monthly / yearly
     # ranges = db.Column(db.String()) #used to store range when user receives income e.g. if on months 1-3, 5-7, ranges would be "1-3,5-7" or something
 
@@ -58,7 +58,7 @@ class Debts(db.Model):
     
     dueDate = db.Column(db.Integer) # months until paid
     chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
-    accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
+    #accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
     # dclass = db.Column(db.String()) #weekly, monthly etc
 
 
@@ -77,7 +77,7 @@ class Expenses(db.Model):
     __tablename__='expenses'
     id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     # name = db.Column(db.String(20), primary_key=True)
-    amount = db.Column(db.Numeric(10,2))
+    amount = db.Column(db.Numeric(10,2), default=0.0)
     # eclass = db.Column(db.String()) #weekly / monthly / yearly
 
     def __init__(self, id, amount):
@@ -91,9 +91,12 @@ def dbinit():
     db.create_all()
     # Create a new user
     user = Users(username='user1', 
-                 password_hash='hashed_password_example', 
+                 password_hash='password', 
                  email='user1@example.com', fname="bleh", lname='blah')
 
+    user = Users(username='abc', 
+                 password_hash='abc', 
+                 email='abc@example.com', fname="abc", lname='abc')
     # Add the user to the session
     db.session.add(user)
 
@@ -102,37 +105,34 @@ def dbinit():
     record.debt_budget = 50000
     db.session.commit()
 
+#accruedAnnualInterest=0.00
+#removed?
     # Create different debts for the user
     debts = [
         Debts(id=0, name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
-               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=365), 
-               accruedAnnualInterest=0.00),
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=365)),
         
         Debts(id=0, name='Student Loan', amount=15000.00, minPayment=300.00, interest=4.50, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
-               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=5*365), 
-               accruedAnnualInterest=0.00),
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=5*365)),
         
         Debts(id=0, name='Credit Card', amount=5000.00, minPayment=150.00, interest=18.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
-               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30), 
-               accruedAnnualInterest=0.00),
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30)),
         
         Debts(id=0, name='Personal Loan', amount=10000.00, minPayment=250.00, interest=6.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
-               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=3*365), 
-               accruedAnnualInterest=0.00),
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=3*365)),
         
         Debts(id=0, name='Mortgage', amount=250000.00, minPayment=1200.00, interest=3.75, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                dueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
-               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30*365), 
-               accruedAnnualInterest=0.00),
+               chosenDueDate=datetime.datetime.now() + datetime.timedelta(days=30*365)),
     ]
 
     # Add each debt to the session

@@ -502,8 +502,6 @@ def logout():
     logout_user()
     return redirect('/home')
 
-
-
 @app.route('/debt-dashboard')
 @login_required
 def dept_dash():
@@ -515,7 +513,9 @@ def dept_dash():
   income = Incomes.query.filter_by(id=current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
-
+@app.route('/budgeting-tips')
+def budgeting_tips():
+  return render_template('budgeting-tips.html')
 
 #TODO: properly date and string storage of date
 
@@ -529,6 +529,9 @@ def dept_dash():
 def add_debt():
   if request.method == 'POST':
     name = request.form['name']
+    q = Debts.query.filter_by(id=current_user.id, name=name).first()
+    if not q is None:
+       return "already used"
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
@@ -666,9 +669,17 @@ def debt_recalc():
   ex=0
   debts = Debts.query.filter_by(id=current_user.id).all()
   ex = Expenses.query.filter_by(id=current_user.id).first()
-  inc = Incomes.query.filter_by(id=current_user.id).first() 
+  if ex is None:
+    x = 0
+  else:
+    x = ex.amount
+  inc = Incomes.query.filter_by(id=current_user.id).first()
+  if inc is None:
+     i = 0
+  else:
+     i = inc.amount
   for debt in debts:
-    due_date=calculate_months_to_pay_off(debts, (inc-ex))
+    due_date=calculate_months_to_pay_off(debts, (i-x))
     debt.dueDate = due_date
   db.session.commit()
 
@@ -685,7 +696,7 @@ def debt_recalc():
      """
 def calculate_months_to_pay_off(debts, monthly_budget):
 
-    months = 0
+    month = 0
     # Retrieve debts from the database and make an in-memory copy of their balances and interest rates
     
     debt_data = [
@@ -728,7 +739,82 @@ def calculate_months_to_pay_off(debts, monthly_budget):
             debt['effective_interest'] = debt['balance'] * debt['interest']/100
         
         # Increment the month counter
-        months += 1
+        month += 1
+        if month > 1200:
+          return "ah bollocks, you're permanently in debt"
         
 
-    return months
+    return month
+
+"""
+    Calculates the % of initial debt payed off every 3 months+no of months required to pay of all debts 
+
+    Parameters:
+    - debts: all user debts
+    - monthly_budget (float): The amount available to pay off debts each month.
+
+    Returns:
+    - dictionar:Month No,Percentage of OG payed off 
+     """
+def calculate_TimeLine_to_pay_off(debts, monthly_budget):
+
+    month = 0
+    #cumulative_paid_off = 0  # Track the total amount paid off over time
+    percentage_remainin=0.0
+    report_month_and_percent_remainingBalance = {}
+    # Retrieve debts from the database and make an in-memory copy of their balances and interest rates
+    
+    debt_data = [
+        {
+            #'id': debt.id,
+            'balance': debt.amount,
+            'interest': debt.interest,
+            'effective_interest': debt.amount * (debt.interest/100)
+        }
+        for debt in debts
+    ]
+
+    original_total_balance = sum(debt['balance'] for debt in debt_data)
+
+    # Loop until all debts are paid off
+    while any(debt['balance'] > 0 for debt in debt_data):
+        # Sort debts by the highest effective interest first
+        debt_data.sort(key=lambda x: x['effective_interest'], reverse=True)
+
+        # Start with the monthly budget for this month
+        budget = monthly_budget
+
+        # Pay off debts in order of highest effective interest
+        for debt in debt_data:
+            if debt['balance'] <= budget:
+                # Fully pay off this debt
+                budget -= debt['balance']
+                debt['balance'] = 0
+            else:
+                # Partially pay this debt
+                debt['balance'] -= budget
+                budget = 0  # Budget exhausted
+                break  # Exit loop if no budget is left
+        # Apply interest to remaining debts for the next month
+        '''for i in range (0,len(debt_data)):
+           print()
+           debt_data[i]['balance'] *= (1 + debt_data[i]['interest']/100)
+           debt_data[i]['effective_interest'] = debt_data[i]['balance'] * debt_data[i]['interest']/100'''
+
+        for debt in debt_data:
+            debt['balance'] *= (1 + debt['interest']/100)
+            debt['effective_interest'] = debt['balance'] * debt['interest']/100
+        
+        # Increment the month counter
+        month += 1
+
+        if month % 3 == 0 or all(debt['balance'] == 0 for debt in debt_data):
+          remaining_balance = sum(debt['balance'] for debt in debt_data)
+          percentage_remaining = (remaining_balance / original_total_balance) * 100
+          report_month_and_percent_remainingBalance[month]=percentage_remaining;
+        
+
+    return report_month_and_percent_remainingBalance
+
+#def calcDebtToMonthlyIncomeRation():
+   
