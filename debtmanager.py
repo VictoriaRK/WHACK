@@ -52,6 +52,9 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 
+
+
+
 resetdb = False # won't reset the database every time it is closed
 if resetdb:
     with app.app_context():
@@ -69,14 +72,11 @@ def resetdb():
     return redirect('/')
 
 
-#route to the index
+#route to the log-in page as the default
 @app.route('/')
 def index():
   return redirect('/log-in')
-    # with open('README.md') as readme:
-    #   with open('requirements.txt') as req:
-    #     return render_template('index.html', README=readme.read(), requirements=req.read())
-
+    
 
 
 #sends an email 
@@ -209,14 +209,6 @@ def view_ticket():
 
 
 
-# def make_barcode(data, barcode_format, options=None):
-#     # Get the barcode class corresponding to the specified format 
-#     barcode_class = barcode.get_barcode_class(barcode_format)
-#     # Create a barcode image using the provided data and format
-#     barcode_image = barcode_class(data, writer=ImageWriter())
-#     # Save the barcode image to a file named "barcode" with the specified options
-#     barcode_image.save("", options="code128")
-
 
 
 
@@ -227,7 +219,7 @@ def view_ticket():
     
 
 
-#TODO make qr code
+
 #The user can book an event. A ticket will be created for them, or if they had previously cancelled the event, their old ticket will become available again.
 # A confirmation email will be sent to the user.
 #If bookings are near capacity, the superuser is notified via email.
@@ -513,19 +505,13 @@ def logout():
     return redirect('/home')
 
 
-'''#update logs in all other functions
-#they are shown here
-@app.route('/show-logs')
-@login_required
-def showlogs():
-  if current_user.is_super:
-    logs = Logs.query.all()
-    return render_template('show-logs.html', logs=logs)
-  return render_template('/home')'''
 
-@app.route('/debt-dash')
+@app.route('/debt-dashboard')
 @login_required
 def dept_dash():
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  expense = Expenses.query.filter_by(id = current_user.id).first()
+  income = Incomes.query.filter_by(id = current_user.id).first()
   debts = Debts.query.filter_by(id=current_user.id).all()
   expense = Expenses.query.filter_by(id=current_user.id).first()
   income = Incomes.query.filter_by(id=current_user.id).first()
@@ -533,7 +519,9 @@ def dept_dash():
 
 
 
-#TODO: 
+#TODO: properly date and string storage of date
+
+
 #forall, adds algorithm to run to find duedate
 
 #adds the debt as a debt in the Debts db
@@ -542,7 +530,8 @@ def dept_dash():
 @login_required
 def add_debt():
   if request.method == 'POST':
-    name = request.form['name']
+    name = request.form['name']    
+    pclass = request.form['pclass']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
@@ -550,7 +539,11 @@ def add_debt():
     start_date = request.form['start-date']
     due_date=request.form['due-date']
     debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date, accruedAnnualInterest=0.0)#max_capacity, location, cancellable) #TODO: properly populate
+    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate=10, chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
+    db.session.commit()
+    #recalculate all the debt due dates
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-debt.html')
@@ -561,13 +554,13 @@ def add_debt():
 @login_required
 def add_expenses():
   if request.method == 'POST':
-    '''old = Expenses.query.filter_by(username = current_user.username).first()
+    '''old = Expenses.query.filter_by(id = current_user.id).first()
     db.session.delete(old)'''
     amount = float(request.form['amount'])
-    name = request.form['name']
-    eclass = request.form['class']
-    debt = Expenses(current_user.id, name, amount, eclass=eclass) #TODO: properly populate
-    db.session.add(debt)
+    exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
+    db.session.add(exp)
+    db.session.commit()
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-expenses.html')
@@ -577,15 +570,14 @@ def add_expenses():
 @login_required
 def add_income():
   if request.method == 'POST':
-    '''old = Incomes.query.filter_by(username = current_user.username).first()
+    '''old = Incomes.query.filter_by(id = current_user.id).first()
     db.session.delete(old)'''
     iclass = request.form['iclass']
     amount = float(request.form['income'])
-    name = request.form['name']
-    ranges = request.form['ranges']
-
-    debt = Incomes(current_user.id, name=name, amount=amount, iclass=iclass, ranges=ranges) #TODO: properly populate
-    db.session.add(debt)
+    inc = Incomes(id=current_user.id, amount=amount)
+    db.session.add(inc)
+    db.session.commit()
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-income.html')
@@ -683,14 +675,22 @@ def create_user_with_debts():
 @app.route('/timeline', methods=['GET', 'POST'])
 @login_required
 def findToPayOff():
-  debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
+  #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
+  debts = Debts.query.filter(Debts.id=="user1", Debts.amount>0).all()
   # Fetch  current user's budget directly from the User table
   monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
   return str(noMonthsNeeded)
 
 
-
+def debt_recalc():
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  ex = Expenses.query.filter_by(id=current_user.id).first()
+  inc = Incomes.query.filter_by(id=current_user.id).first() 
+  for debt in debts:
+    due_date=calculate_months_to_pay_off(debts, (inc-ex))
+    debt.dueDate = due_date
+  db.session.commit()
 
 
   """
@@ -713,7 +713,7 @@ def calculate_months_to_pay_off(debts, monthly_budget):
             #'id': debt.id,
             'balance': debt.amount,
             'interest': debt.interest,
-            'effective_interest': debt.amount * debt.interest/100
+            'effective_interest': debt.amount * (debt.interest/100)
         }
         for debt in debts
     ]
