@@ -20,7 +20,7 @@ class Users(db.Model, UserMixin):
     fname = db.Column(db.String())
     lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
-    # debt_budget = db.Column(db.Numeric(10,2))
+    debt_budget = db.Column(db.Numeric(10,2))
                          
     def __init__(self, username, password_hash, fname, lname, email):
         self.username=username
