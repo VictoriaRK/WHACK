@@ -505,7 +505,9 @@ def dept_dash():
 
 
 
-#TODO: 
+#TODO: properly date and string storage of date
+
+
 #forall, adds algorithm to run to find duedate
 
 #adds the debt as a debt in the Debts db
@@ -514,15 +516,23 @@ def dept_dash():
 @login_required
 def add_debt():
   if request.method == 'POST':
-    type = request.form['type']
+    name = request.form['name']    
+    pclass = request.form['pclass']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
     chosen_due_date = request.form['chosen-due-date']
     start_date = request.form['start-date']
-    due_date=request.form['due-date']
-    debt = Debts(id=current_user.id, name=type, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date)#max_capacity, location, cancellable) #TODO: properly populate
+    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate="", chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
+    db.session.commit()
+    #recalculate all the debt due dates
+    debts = Debts.query.filter_by(id=current_user.id).all()
+    ex = Expenses.query.filter_by(id=current_user.id).first()
+    inc = Incomes.query.filter_by(id=current_user.id).first() 
+    for debt in debts:
+      due_date=calculate_months_to_pay_off(debts, (inc-ex))
+      debt.dueDate = due_date
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-debt.html')
@@ -533,11 +543,11 @@ def add_debt():
 @login_required
 def add_expenses():
   if request.method == 'POST':
-    old = Expenses.query.filter_by(username = current_user.username).first()
+    old = Expenses.query.filter_by(id = current_user.id).first()
     db.session.delete(old)
     amount = float(request.form['amount'])
-    debt = Expenses(current_user.id, name, amount, eclass) #TODO: properly populate
-    db.session.add(debt)
+    exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
+    db.session.add(exp)
     db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
@@ -548,11 +558,11 @@ def add_expenses():
 @login_required
 def add_income():
   if request.method == 'POST':
-    old = Incomes.query.filter_by(username = current_user.username).first()
+    old = Incomes.query.filter_by(id = current_user.id).first()
     db.session.delete(old) 
     amount = float(request.form['income'])
-    debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
-    db.session.add(debt)
+    inc = Incomes(id=current_user.id, amount=amount)
+    db.session.add(inc)
     db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
