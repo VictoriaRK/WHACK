@@ -498,9 +498,9 @@ def logout():
 @app.route('/debt-dashboard')
 @login_required
 def dept_dash():
-  debts = Debts.query.filter_by(username=current_user.username).all()
-  expense = Expenses.query.filter_by(username = current_user.username).first()
-  income = Incomes.query.filter_by(username = current_user.username).first()
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  expense = Expenses.query.filter_by(id = current_user.id).first()
+  income = Incomes.query.filter_by(id = current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
 
