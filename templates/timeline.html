@@ -16,8 +16,7 @@
                 <h1></h1>
 				<div class='spacer'></div>
 				<form action='simulation' method ='GET'>
-					<h2>No. Months til you are Debt Free</h2>
-					<button id="calculateButton">Calculate</button>
+
 					
 					<div id="message"></div>
 				
@@ -35,8 +34,7 @@
 									console.error('Error fetching data:', error);
 								});
 						});
-						</script> -->
-						<h2>No. Months til you are Debt Free</h2>
+						</script> 
 						<p>Debt-free in {{ noMonthsNeeded }} months!</p>
 
 						<h3>Debt Payment Timeline</h3>
@@ -57,8 +55,6 @@
 							</tbody>
 						</table>
 
-					
-					<!-- {%end if%} -->
 					<!-- if goal stored, show graph timeline -->
                      <!-- if not, redirect to debt dashboard to input data -->
                 </form>
