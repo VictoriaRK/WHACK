@@ -502,8 +502,6 @@ def logout():
     logout_user()
     return redirect('/home')
 
-
-
 @app.route('/debt-dashboard')
 @login_required
 def dept_dash():
@@ -515,7 +513,9 @@ def dept_dash():
   income = Incomes.query.filter_by(id=current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
-
+@app.route('/budgeting-tips')
+def budgeting_tips():
+  return render_template('budgeting-tips.html')
 
 #TODO: properly date and string storage of date
 
@@ -529,6 +529,9 @@ def dept_dash():
 def add_debt():
   if request.method == 'POST':
     name = request.form['name']
+    q = Debts.query.filter_by(id=current_user.id, name=name).first()
+    if not q is None:
+       return "already used"
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
