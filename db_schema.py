@@ -34,7 +34,7 @@ class Incomes(db.Model):
     __tablename__='incomes'
     id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     # name = db.Column(db.String(20), primary_key=True)
-    amount = db.Column(db.Numeric(10,2))
+    amount = db.Column(db.Numeric(10,2), default=0.0)
     # iclass = db.Column(db.String()) #weekly / monthly / yearly
     # ranges = db.Column(db.String()) #used to store range when user receives income e.g. if on months 1-3, 5-7, ranges would be "1-3,5-7" or something
 
@@ -77,7 +77,7 @@ class Expenses(db.Model):
     __tablename__='expenses'
     id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     # name = db.Column(db.String(20), primary_key=True)
-    amount = db.Column(db.Numeric(10,2))
+    amount = db.Column(db.Numeric(10,2), default=0.0)
     # eclass = db.Column(db.String()) #weekly / monthly / yearly
 
     def __init__(self, id, amount):

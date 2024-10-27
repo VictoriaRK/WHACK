@@ -669,9 +669,17 @@ def debt_recalc():
   ex=0
   debts = Debts.query.filter_by(id=current_user.id).all()
   ex = Expenses.query.filter_by(id=current_user.id).first()
-  inc = Incomes.query.filter_by(id=current_user.id).first() 
+  if ex is None:
+    x = 0
+  else:
+    x = ex.amount
+  inc = Incomes.query.filter_by(id=current_user.id).first()
+  if inc is None:
+     i = 0
+  else:
+     i = inc.amount
   for debt in debts:
-    due_date=calculate_months_to_pay_off(debts, (inc-ex))
+    due_date=calculate_months_to_pay_off(debts, (i-x))
     debt.dueDate = due_date
   db.session.commit()
 
@@ -732,6 +740,8 @@ def calculate_months_to_pay_off(debts, monthly_budget):
         
         # Increment the month counter
         month += 1
+        if month > 1200:
+          return "ah bollocks, you're permanently in debt"
         
 
     return month
@@ -806,5 +816,5 @@ def calculate_TimeLine_to_pay_off(debts, monthly_budget):
 
     return report_month_and_percent_remainingBalance
 
-def calcDebtToMonthlyIncomeRation():
+#def calcDebtToMonthlyIncomeRation():
    
