@@ -1,0 +1,97 @@
+body {
+    font-family: "Poppins", sans-serif;
+    color: #1F2731;
+    background-color: #1F2731;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Content Wrapper */
+#content_wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Content */
+#content {
+    width: 100%;
+}
+
+/* Headings */
+h1 {
+    font-size: 2rem;
+    color: #1F2731;
+    margin-bottom: 15px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: "Poppins", sans-serif;
+}
+
+form label {
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #1F2731; 
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    color: #1F2731; 
+    transition: border-color 0.2s;
+    font-family: "Poppins", sans-serif;
+}
+
+input[type="number"]:focus,
+select:focus {
+    border-color: #1F2731;
+    outline: none;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: red;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Spacer */
+.spacer {
+    height: 20px;
+}
