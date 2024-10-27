@@ -94,13 +94,13 @@ def dbinit():
                  password_hash='password', 
                  email='user1@example.com', fname="bleh", lname='blah')
 
+
     #user = Users(username='abc', 
      #          password_hash='abc', 
       #           email='abc@example.com', fname="abc", lname='abc')
     # Add the user to the session
     db.session.add(user)
     db.session.commit()
-
     # Add debt_budget to user
     record = Users.query.filter_by(username='user1').first()
     record.debt_budget = 50000

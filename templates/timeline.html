@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" href="../static/main.css" type="text/css" media="all" charset="utf-8">
 
-		<link rel="stylesheet" href="../static/main.css" type="text/css" media="all" charset="utf-8">
+		<link rel="stylesheet" href="../static/timeline.css" type="text/css" media="all" charset="utf-8">
         <title>Debt Timeline</title>
 	</head>
 	<body>
@@ -17,7 +17,7 @@
 				<div class='spacer'></div>
 				<form action='simulation' method ='GET'>
                     <!-- {%if curent_user.is_authenticated%} -->
-					<h2>No. Months til you are Debt Free</h2>
+					<!-- <h2>No. Months til you are Debt Free</h2>
 					<button id="calculateButton">Calculate</button>
 					
 					<div id="message"></div>
@@ -36,7 +36,29 @@
 									console.error('Error fetching data:', error);
 								});
 						});
-					</script>
+						</script> -->
+						<h2>No. Months til you are Debt Free</h2>
+						<p>Debt-free in {{ noMonthsNeeded }} months!</p>
+
+						<h3>Debt Payment Timeline</h3>
+						<table border="1">
+							<thead>
+								<tr>
+									<th>Month</th>
+									<th>Percentage of Debt Remaining</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for month, percent_remaining in report.items() %}
+									<tr>
+										<td>{{ month }}</td>
+										<td>{{ percent_remaining }}%</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+
+					
 					<!-- {%end if%} -->
 					<!-- if goal stored, show graph timeline -->
                      <!-- if not, redirect to debt dashboard to input data -->
