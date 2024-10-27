@@ -494,15 +494,6 @@ def logout():
     return redirect('/home')
 
 
-'''#update logs in all other functions
-#they are shown here
-@app.route('/show-logs')
-@login_required
-def showlogs():
-  if current_user.is_super:
-    logs = Logs.query.all()
-    return render_template('show-logs.html', logs=logs)
-  return render_template('/home')'''
 
 @app.route('/debt-dashboard')
 @login_required
@@ -661,7 +652,7 @@ def calculate_months_to_pay_off(debts, monthly_budget):
             #'id': debt.id,
             'balance': debt.amount,
             'interest': debt.interest,
-            'effective_interest': debt.amount * debt.interest/100
+            'effective_interest': debt.amount * (debt.interest/100)
         }
         for debt in debts
     ]
