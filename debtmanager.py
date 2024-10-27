@@ -384,12 +384,13 @@ def home():
   return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
   return render_template("debt-dashboard.html")
 
-@app.route('/debt-dashboard')
+'''@app.route('/debt-dashboard')
 @login_required
 def dashboard():
-   return render_template("debt-dashboard.html")
+   return render_template("debt-dashboard.html")'''
 
-@app.route('/simulation')
+
+@app.route('/timeline')
 @login_required
 def timeline():
   #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
@@ -513,11 +514,16 @@ def logout():
 def dept_dash():
   debts = Debts.query.filter_by(id=current_user.id).all()
   expense = Expenses.query.filter_by(id = current_user.id).first()
+  if expense is None:
+      e = 0
+  else:
+     e = expense.amount
   income = Incomes.query.filter_by(id = current_user.id).first()
-  debts = Debts.query.filter_by(id=current_user.id).all()
-  expense = Expenses.query.filter_by(id=current_user.id).first()
-  income = Incomes.query.filter_by(id=current_user.id).first()
-  return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
+  if income is None:
+     i = 0
+  else:
+     i = income.amount
+  return render_template('debt-dashboard.html', debts=debts, expense=e, income=i)
 
 @app.route('/budgeting-tips')
 def budgeting_tips():
