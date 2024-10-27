@@ -47,7 +47,7 @@ form {
     gap: 15px;
     background-color: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: "Poppins", sans-serif;
 }
@@ -55,7 +55,7 @@ form {
 form label {
     font-family: "Poppins", sans-serif;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     color: #1F2731; 
 }
 
@@ -84,6 +84,7 @@ input[type="submit"] {
     font-size: 1rem;
     color: #fff;
     background-color: red;
+    border-radius: 40px;
     font-weight: bold;
     border: none;
     border-radius: 5px;
