@@ -542,14 +542,14 @@ def dept_dash():
 @login_required
 def add_debt():
   if request.method == 'POST':
-    type = request.form['type']
+    name = request.form['name']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
     chosen_due_date = request.form['chosen-due-date']
     start_date = request.form['start-date']
     due_date=request.form['due-date']
-    debt = Debts(id=current_user.id, name=type, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date)#max_capacity, location, cancellable) #TODO: properly populate
+    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date, accruedAnnualInterest=0.0)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
     return redirect('/debt-dashboard')
@@ -561,12 +561,13 @@ def add_debt():
 @login_required
 def add_expenses():
   if request.method == 'POST':
-    old = Expenses.query.filter_by(username = current_user.username).first()
-    db.session.delete(old)
+    '''old = Expenses.query.filter_by(username = current_user.username).first()
+    db.session.delete(old)'''
     amount = float(request.form['amount'])
-    debt = Expenses(current_user.id, name, amount, eclass) #TODO: properly populate
+    name = request.form['name']
+    eclass = request.form['class']
+    debt = Expenses(current_user.id, name, amount, eclass=eclass) #TODO: properly populate
     db.session.add(debt)
-    db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-expenses.html')
@@ -578,16 +579,46 @@ def add_income():
   if request.method == 'POST':
     '''old = Incomes.query.filter_by(username = current_user.username).first()
     db.session.delete(old)'''
+    iclass = request.form['iclass']
     amount = float(request.form['income'])
     name = request.form['name']
+    ranges = request.form['ranges']
 
-    debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
+    debt = Incomes(current_user.id, name=name, amount=amount, iclass=iclass, ranges=ranges) #TODO: properly populate
     db.session.add(debt)
-    db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-income.html')
 
+@app.route('/delete-income', methods=['POST'])
+@login_required
+def delete_income():
+   amount = float(request.form['amount'])
+   name = request.form['name']
+
+   record = Incomes.query.filter_by(id=current_user.id, name = name).first()
+   db.session.delete(record)
+   return redirect('/debt-dashboard')
+
+@app.route('/delete-expense', methods=['POST'])
+@login_required
+def delete_expense():
+   amount = float(request.form['amount'])
+   name = request.form['name']
+
+   record = Expenses.query.filter_by(id=current_user.id, name = name).first()
+   db.session.delete(record)
+   return redirect('/debt-dashboard')
+
+@app.route('/delete-debt', methods=['POST'])
+@login_required
+def delete_debt():
+   amount = float(request.form['amount'])
+   name = request.form['name']
+
+   record = Debts.query.filter_by(id=current_user.id, name = name).first()
+   db.session.delete(record)
+   return redirect('/debt-dashboard')
 
 
 @app.route('/test', methods=['GET', 'POST'])
