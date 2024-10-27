@@ -38,7 +38,7 @@ class Incomes(db.Model):
     # iclass = db.Column(db.String()) #weekly / monthly / yearly
     # ranges = db.Column(db.String()) #used to store range when user receives income e.g. if on months 1-3, 5-7, ranges would be "1-3,5-7" or something
 
-    def __init__(self, id, name, amount, iclass, ranges):
+    def __init__(self, id, amount):
         self.id=id
         # self.name=name
         self.amount=amount
@@ -80,10 +80,10 @@ class Expenses(db.Model):
     amount = db.Column(db.Numeric(10,2))
     # eclass = db.Column(db.String()) #weekly / monthly / yearly
 
-    def __init__(self, id, name, amount, eclass):
+    def __init__(self, id, amount):
         self.id=id
-        self.name=name
-        # self.amount=amount
+        # self.name=name
+        self.amount=amount
         # self.eclass=eclass
 
 
