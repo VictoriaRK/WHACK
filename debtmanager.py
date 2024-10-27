@@ -539,8 +539,8 @@ def dept_dash():
 
 
 
-
-
+#TODO: 
+#forall, adds algorithm to run to find duedate
 
 #adds the debt as a debt in the Debts db
 
@@ -552,7 +552,8 @@ def add_debt():
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
-    due_date = request.form['due-date']
+    chosen_due_date = request.form['due-date']
+    due_date= calculate_months_to_pay_off()
     debt = Debts(current_user.id, name, amount, min_monthly_pay, interest, max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
@@ -589,7 +590,7 @@ def add_income():
     db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
-  return render_template('add-expenses.html')
+  return render_template('add-income.html')
 
 
 

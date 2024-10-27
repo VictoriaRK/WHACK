@@ -42,6 +42,7 @@ class Incomes(db.Model):
         self.iclass=iclass
         self.ranges=ranges
         
+#name is name of each thing
 
 class Debts(db.Model):
     __tablename__='debts'
@@ -51,10 +52,10 @@ class Debts(db.Model):
     minPayment = db.Column(db.Numeric(10,2))
     interest = db.Column(db.Numeric(5,2))
     startDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
-    dclass = db.Column(db.String())
+    dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input - 
+    chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
+    #accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
+    dclass = db.Column(db.String()) #weekly, monthly etc
 
 
     def __init__(self, username, name, amount, minPayment, interest, startDate, dueDate, chosenDueDate, accruedAnnualInterest, dclass):
