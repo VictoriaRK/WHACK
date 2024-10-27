@@ -390,7 +390,7 @@ def dashboard():
    return render_template("debt-dashboard.html")'''
 
 
-@app.route('/simulation')
+@app.route('/timeline')
 @login_required
 def timeline():
   #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
