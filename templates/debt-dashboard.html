@@ -28,19 +28,13 @@
                 </div>
                 {% endfor %}
 
-                {% for e in expense %}
                 <div id="expense">
-                    <p>Expenses: {{ e.amount }}</p>
-                    <p>Type: {{ e.eclass }}</p>
+                    <p>Expenses: {{ expense }}</p>
                 </div>
-                {% endfor %}
 
-                {% for i in income %}
                 <div id="income">
-                    <p>Expenses: {{ i.amount }}</p>
-                    <p>Type: {{ i.iclass }}</p>
+                    <p>Expenses: {{ income }}</p>
                 </div>
-                {% endfor %}
 
 
                 <!-- add debt -->
