@@ -17,13 +17,30 @@
                 <!-- show all debts -->
                 {% for debt in debts %}
                 <div id="debts">
-
+                    <p>{{ debt.name }}</p>
+                    <p>{{ debt.amount }}</p>
+                    <p>Interest: {{ debt.interest }}</p>
+                    <p>Start Date: {{ debt.startDate }}</p>
+                    <p>Goal End Date: {{ debt.chosenDueDate }}</p>
+                    <p>Expected Payment Completion: {{ debt.dueDate }} months</p>
+                    <p>Type: {{ debt.dclass }}</p>
                 </div>
                 {% endfor %}
 
-                <div id="income">
-
+                {% for e in expense %}
+                <div id="expense">
+                    <p>Expenses: {{ e.amount }}</p>
+                    <p>Type: {{ e.eclass }}</p>
                 </div>
+                {% endfor %}
+
+                {% for i in income %}
+                <div id="income">
+                    <p>Expenses: {{ i.amount }}</p>
+                    <p>Type: {{ i.iclass }}</p>
+                </div>
+                {% endfor %}
+
 
                 <!-- add debt -->
                 <!-- redirect to add debt-->
@@ -37,6 +54,8 @@
 
 
                 <!-- button to redirect to timeline -->
+                <button> <a href="{{ url_for('timeline') }}">Timeline</a></button>
+
 
             </div>
 		</div>
