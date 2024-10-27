@@ -1,14 +1,6 @@
-/* main.css */
-
-/* Base Reset */
-* {
-    box-sizing: border-box;
-
-}
-
 body {
     font-family: "Poppins", sans-serif;
-    color:  #1F2731;
+    color: #1F2731;
     background-color: #1F2731;
     display: flex;
     justify-content: center;
@@ -17,7 +9,7 @@ body {
 }
 
 /* Content Wrapper */
-#content {
+#content_wrapper {
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
@@ -27,6 +19,10 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Form Content */
+#content {
+    width: 100%;
+}
 
 /* Headings */
 h1 {
@@ -37,14 +33,12 @@ h1 {
     font-family: "Poppins", sans-serif;
 }
 
-
 h2 {
     font-size: 1.5rem;
-    color: #1F2731;
+    color: #333;
     margin-bottom: 10px;
     font-family: "Poppins", sans-serif;
 }
-
 
 /* Form Styling */
 form {
@@ -53,23 +47,19 @@ form {
     gap: 15px;
     background-color: white;
     padding: 20px;
-    border-radius: 1px;
+    border-radius: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: "Poppins", sans-serif;
 }
 
- form label {
+form label {
     font-family: "Poppins", sans-serif;
     font-weight: bold;
-    margin-bottom: 5px; /* Set to 5px or adjust as needed */
-    color: #1F2731; /* Valid color */
+    margin-bottom: 20px;
+    color: #1F2731; 
 }
 
-
-
 input[type="number"],
-input[type="date"],
-input[type="text"], 
 select {
     width: 100%;
     padding: 12px;
@@ -82,20 +72,9 @@ select {
 }
 
 input[type="number"]:focus,
-input[type="date"]:focus,
-input[type="text"]:focus, /* Fix applied here */
 select:focus {
     border-color: #1F2731;
     outline: none;
-}
-
-
-form label,
-form input[type="number"],
-form input[type="date"],
-form input[type="text"],
-form select {
-    color: #1F2731;
 }
 
 /* Submit Button */
@@ -105,12 +84,12 @@ input[type="submit"] {
     font-size: 1rem;
     color: #fff;
     background-color: red;
+    border-radius: 40px;
     font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-family: "Poppins", sans-serif;
-
 }
 
 /* Spacer */

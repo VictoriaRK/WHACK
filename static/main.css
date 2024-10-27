@@ -17,10 +17,6 @@ nav {
     color: white;
 }
 
-body {
-    background-color: yellow; /* Just for testing */
-}
-
 /* This makes it a line */ 
 a {
     text-decoration: none;

@@ -384,6 +384,15 @@ def home():
   return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
   return render_template("debt-dashboard.html")
 
+@app.route('/debt-dashboard')
+@login_required
+def dashboard():
+   return render_template("debt-dashboard.html")
+
+@app.route('/simulation')
+@login_required
+def timeline():
+   return render_template("timeline.html")
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -501,6 +510,9 @@ def dept_dash():
   debts = Debts.query.filter_by(id=current_user.id).all()
   expense = Expenses.query.filter_by(id = current_user.id).first()
   income = Incomes.query.filter_by(id = current_user.id).first()
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  expense = Expenses.query.filter_by(id=current_user.id).first()
+  income = Incomes.query.filter_by(id=current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
 
@@ -516,13 +528,13 @@ def dept_dash():
 @login_required
 def add_debt():
   if request.method == 'POST':
-    name = request.form['name']    
-    pclass = request.form['pclass']
+    name = request.form['name']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
     chosen_due_date = request.form['chosen-due-date']
     start_date = request.form['start-date']
+    #due_date=request.form['due-date']
     debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate=10, chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
@@ -539,7 +551,8 @@ def add_debt():
 def add_expenses():
   if request.method == 'POST':
     old = Expenses.query.filter_by(id = current_user.id).first()
-    db.session.delete(old)
+    if not old is None:
+      db.session.delete(old)
     amount = float(request.form['amount'])
     exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
     db.session.add(exp)
@@ -555,7 +568,8 @@ def add_expenses():
 def add_income():
   if request.method == 'POST':
     old = Incomes.query.filter_by(id = current_user.id).first()
-    db.session.delete(old) 
+    if not old is None:
+      db.session.delete(old) 
     amount = float(request.form['income'])
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
@@ -565,6 +579,16 @@ def add_income():
     return redirect('/debt-dashboard')
   return render_template('add-income.html')
 
+
+@app.route('/delete-debt', methods=['POST'])
+@login_required
+def delete_debt():
+   #amount = float(request.form['amount'])
+   name = request.form['name']
+
+   record = Debts.query.filter_by(id=current_user.id, name = name).first()
+   db.session.delete(record)
+   return redirect('/debt-dashboard')
 
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -638,6 +662,8 @@ def findToPayOff():
 
 
 def debt_recalc():
+  inc=0
+  ex=0
   debts = Debts.query.filter_by(id=current_user.id).all()
   ex = Expenses.query.filter_by(id=current_user.id).first()
   inc = Incomes.query.filter_by(id=current_user.id).first() 

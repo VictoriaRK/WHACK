@@ -2,12 +2,13 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="../static/main.css" type="text/css" media="all" charset="utf-8">
+        <link rel="stylesheet" href="../static/add-expenses.css" type="text/css" media="all" charset="utf-8">
         <title>Add Income</title>
 	</head>
 	<body>
         <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 		<div id='content_wrapper'>
-			{% include "navigation-bar.html" %}
+            {% include "navigation-bar.html" %}
 
 			<div id='content'>
 
@@ -17,7 +18,7 @@
                       <!-- add income - if already in there tell them it will modify -->
                     <h2>Enter details:</h2>
                     <p><label for="income">Monthly Income:</label> <input type = "number" placeholder="0.0" step="0.01" min="0" name = "income" required/></p>
-                    <p><input type = "submit" value = "Create Account" /></p>
+                    <p><input type = "submit" value = "Add" /></p>
                 </form>
             </div>
 		</div>
