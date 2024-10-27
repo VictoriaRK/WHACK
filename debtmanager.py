@@ -399,7 +399,7 @@ def timeline():
   monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
   report_month_percent_remainingBalance=calculate_TimeLine_to_pay_off(debts, monthly_budget)
-  return render_template("timeline.html",noMonthsNeeded=noMonthsNeeded,report_month_percent_remainingBalance=report_month_percent_remainingBalance)
+  return render_template("timeline.html",noMonthsNeeded=noMonthsNeeded,report=report_month_percent_remainingBalance)
 
 
 
