@@ -435,8 +435,8 @@ def save_password_reset():
 # If they do not, the details are saved, and an email is sent.
 @app.route('/register', methods=["GET", "POST"])
 def register():
-  #if current_user.is_authenticated:
-    #return redirect('/home')
+  if current_user.is_authenticated:
+    return redirect('/home')
 
   if request.method=="GET":
     return render_template("register.html")
@@ -456,15 +456,15 @@ def register():
       db.session.add(new_user)
       db.session.commit()
       login_user(new_user)
-      sendemail(recipients=[email], subject="Welcome to EventByte!", body=f'Hello {fname}, \nWe\'re so happy you\'ve joined the EventByte family!\nStart exploring new events today to find your next adventure.\nFrom The EventByte Team')
+      sendemail(recipients=[email], subject="Welcome to Bollox United!", body=f'Hello {fname}, \nWe\'re so happy you\'ve joined the EventByte family!\nStart exploring new events today to find your next adventure.\nFrom The Bollox Team')
       return redirect('/home')
     return render_template("log-in.html")
 
 # The user can log in via email or username so they are both checked.
 @app.route('/log-in', methods=["GET", "POST"])
 def login():
-  #if current_user.is_authenticated:
-    #return redirect('/home')
+  if current_user.is_authenticated:
+    return redirect('/home')
 
   if request.method == "POST":
     name = request.form['name']
@@ -533,18 +533,24 @@ def searched():
 
 
 
-""" @app.route('/timeline', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST'])
 def create_user_with_debts():
     # Create a new user
-    user = Users(username='user1', 
-                 password_hash='hashed_password_example', 
-                 salt='salt_value_example', 
+    '''user = Users(username='user1', 
+                 password_hash='chachachachachachacha', 
+                 fname='bleh', 
+                 lname='bleeeeh', 
                  email='user1@example.com')
 
     # Add the user to the session
-    db.session.add(user)
+    db.session.add(user)'''
 
-    # Create different debts for the user
+    # Add debt_budget to user
+    record = Users.query.filter_by(username='user1').first()
+    record.debt_budget = 50000
+    db.session.commit()
+
+    '''# Create different debts for the user
     debts = [
         Debts(username='user1', name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
@@ -579,20 +585,21 @@ def create_user_with_debts():
 
     # Add each debt to the session
     for debt in debts:
-        db.session.add(debt)
+        db.session.add(debt)'''
 
     # Commit the session to save the user and debts in the database
-    db.session.commit() """
+    #db.session.commit()
+    return "bleh :)"
 
 
 @app.route('/timeline', methods=['GET', 'POST'])
+@login_required
 def findToPayOff():
-  debts=Debts.query.filter_by(username = "user1").order_by(Debts.accruedAnnualInterest.asc())
+  debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
   # Fetch  current user's budget directly from the User table
-  monthly_budget = Users.query.filter_by(id=0).first().debt_budget
-
+  monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
-  return noMonthsNeeded
+  return str(noMonthsNeeded)
 
 
 
@@ -615,10 +622,10 @@ def calculate_months_to_pay_off(debts, monthly_budget):
     
     debt_data = [
         {
-            'id': debt.id,
-            'balance': debt.balance,
+            #'id': debt.id,
+            'balance': debt.amount,
             'interest': debt.interest,
-            'effective_interest': debt.balance * debt.interest
+            'effective_interest': debt.amount * debt.interest/100
         }
         for debt in debts
     ]
@@ -642,14 +649,18 @@ def calculate_months_to_pay_off(debts, monthly_budget):
                 debt['balance'] -= budget
                 budget = 0  # Budget exhausted
                 break  # Exit loop if no budget is left
-
         # Apply interest to remaining debts for the next month
+        '''for i in range (0,len(debt_data)):
+           print()
+           debt_data[i]['balance'] *= (1 + debt_data[i]['interest']/100)
+           debt_data[i]['effective_interest'] = debt_data[i]['balance'] * debt_data[i]['interest']/100'''
+
         for debt in debt_data:
-            if debt['balance'] > 0:
-                debt['balance'] *= (1 + debt['interest'])
-                debt['effective_interest'] = debt['balance'] * debt['interest']
+            debt['balance'] *= (1 + debt['interest']/100)
+            debt['effective_interest'] = debt['balance'] * debt['interest']/100
         
         # Increment the month counter
         months += 1
+        
 
     return months

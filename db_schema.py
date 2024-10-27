@@ -14,7 +14,7 @@ db = SQLAlchemy()
 
 class Users(db.Model, UserMixin):
     __tablename__='users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
+    id = db.Column(db.Integer, primary_key=True)#, autoincrement=True, default=0)
     username = db.Column(db.String(20), unique=True)
     password_hash = db.Column(db.String())
     fname = db.Column(db.String())
@@ -88,17 +88,19 @@ class Expenses(db.Model):
 
 
 def dbinit():
-    
-
-    db.drop_all()
+    db.create_all()
     # Create a new user
     user = Users(username='user1', 
                  password_hash='hashed_password_example', 
-                 salt='salt_value_example', 
-                 email='user1@example.com')
+                 email='user1@example.com', fname="bleh", lname='blah')
 
     # Add the user to the session
     db.session.add(user)
+
+    # Add debt_budget to user
+    record = Users.query.filter_by(username='user1').first()
+    record.debt_budget = 50000
+    db.session.commit()
 
     # Create different debts for the user
     debts = [
@@ -144,26 +146,3 @@ def dbinit():
     # if len(tables) > 0:
     #     print(f"The database contains these tables already\n{tables}" )
     #     return
-
-    db.create_all()
-    '''user_list = [
-        Users(username="thesuperhumanpear", email="Victoria.Krushovska@warwick.ac.uk", fname="Victoria", lname="Krushovska", password_hash=security.generate_password_hash("securityWOW234"), is_super=True), 
-        Users(username="thehumanpear", email="vkrushovska@gmail.com", fname="Vicky", lname="Krusha", password_hash=security.generate_password_hash("sucha_gooDPassword"), is_super=False)
-        ]
-    db.session.add_all(user_list)
-
-    all_events = [
-        Events(event_name="The future of Web Dev", event_info="With AI usage on the rise, how will this impact the way we view web development? What tools should we expect from the future? Why is this important?", date="2025-08-20", time="15:30", duration=120, max_capacity=100, location="L4", cancellable=False),
-        Events(event_name="Graphs: What are they and why do we care?", event_info="A deepdive into graph theory and its practical applications.", date="2024-05-24", time="10:30", duration=240, max_capacity=300, location="MS02", cancellable=True)
-        ]
-    db.session.add_all(all_events)
-
-
-    all_bookings = [
-        #Tickets(user_id=Users.query.filter_by(username="thehumanpear").first().id, event_id=Events.query.filter_by(event_name="Intro to Absurdism in Computer Science").first().id)
-        Tickets(user_id=2, event_id=2)
-        ]
-    db.session.add_all(all_bookings)
-
-    # commit all the changes to the database file
-    db.session.commit()'''
