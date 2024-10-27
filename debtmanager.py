@@ -395,8 +395,6 @@ def timeline():
    return render_template("timeline.html")
 
 
-
-
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
 
 # The email of the forgotten password is sent a link with a token if the email is in the database.
@@ -530,8 +528,7 @@ def dept_dash():
 @login_required
 def add_debt():
   if request.method == 'POST':
-    name = request.form['name']    
-    #pclass = request.form['pclass']
+    name = request.form['name']
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
@@ -553,8 +550,8 @@ def add_debt():
 @login_required
 def add_expenses():
   if request.method == 'POST':
-    '''old = Expenses.query.filter_by(id = current_user.id).first()
-    db.session.delete(old)'''
+    old = Expenses.query.filter_by(id = current_user.id).first()
+    db.session.delete(old)
     amount = float(request.form['amount'])
     exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
     db.session.add(exp)
@@ -569,9 +566,8 @@ def add_expenses():
 @login_required
 def add_income():
   if request.method == 'POST':
-    '''old = Incomes.query.filter_by(id = current_user.id).first()
-    db.session.delete(old)'''
-    iclass = request.form['iclass']
+    old = Incomes.query.filter_by(id = current_user.id).first()
+    db.session.delete(old) 
     amount = float(request.form['income'])
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
