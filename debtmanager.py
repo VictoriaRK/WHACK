@@ -622,7 +622,8 @@ def create_user_with_debts():
 @app.route('/timeline', methods=['GET', 'POST'])
 @login_required
 def findToPayOff():
-  debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
+  #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
+  debts = Debts.query.filter(Debts.id=="user1", Debts.amount>0).all()
   # Fetch  current user's budget directly from the User table
   monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
