@@ -803,5 +803,5 @@ def calculate_TimeLine_to_pay_off(debts, monthly_budget):
 
     return report_month_and_percent_remainingBalance
 
-def calcDebtToMonthlyIncomeRation():
+#def calcDebtToMonthlyIncomeRation():
    
