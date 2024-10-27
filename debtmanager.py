@@ -662,6 +662,8 @@ def findToPayOff():
 
 
 def debt_recalc():
+  inc=0
+  ex=0
   debts = Debts.query.filter_by(id=current_user.id).all()
   ex = Expenses.query.filter_by(id=current_user.id).first()
   inc = Incomes.query.filter_by(id=current_user.id).first() 
