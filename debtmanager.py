@@ -392,7 +392,13 @@ def dashboard():
 @app.route('/simulation')
 @login_required
 def timeline():
-   return render_template("timeline.html")
+  #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
+  debts = Debts.query.filter(Debts.id=="user1", Debts.amount>0).all()
+  # Fetch  current user's budget directly from the User table
+  monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
+  noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
+  report_month_percent_remainingBalance=calculate_TimeLine_to_pay_off(debts, monthly_budget)
+  return render_template("timeline.html",noMonthsNeeded=noMonthsNeeded,report_month_percent_remainingBalance=report_month_percent_remainingBalance)
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -650,7 +656,7 @@ def create_user_with_debts():
     return "bleh :)"
 
 
-@app.route('/timeline', methods=['GET', 'POST'])
+#@app.route('/timeline', methods=['GET', 'POST'])
 @login_required
 def findToPayOff():
   #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
