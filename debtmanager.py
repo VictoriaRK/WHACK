@@ -551,7 +551,8 @@ def add_debt():
 def add_expenses():
   if request.method == 'POST':
     old = Expenses.query.filter_by(id = current_user.id).first()
-    db.session.delete(old)
+    if not old is None:
+      db.session.delete(old)
     amount = float(request.form['amount'])
     exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
     db.session.add(exp)
@@ -567,7 +568,8 @@ def add_expenses():
 def add_income():
   if request.method == 'POST':
     old = Incomes.query.filter_by(id = current_user.id).first()
-    db.session.delete(old) 
+    if not old is None:
+      db.session.delete(old) 
     amount = float(request.form['income'])
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
@@ -577,23 +579,6 @@ def add_income():
     return redirect('/debt-dashboard')
   return render_template('add-income.html')
 
-@app.route('/delete-income', methods=['POST'])
-@login_required
-def delete_income():
-   #amount = float(request.form['amount'])
-   record = Incomes.query.filter_by(id=current_user.id).first()
-   db.session.delete(record)
-   return redirect('/debt-dashboard')
-
-@app.route('/delete-expense', methods=['POST'])
-@login_required
-def delete_expense():
-   #amount = float(request.form['amount'])
-   name = request.form['name']
-
-   record = Expenses.query.filter_by(id=current_user.id, name = name).first()
-   db.session.delete(record)
-   return redirect('/debt-dashboard')
 
 @app.route('/delete-debt', methods=['POST'])
 @login_required
