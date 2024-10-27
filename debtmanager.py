@@ -390,7 +390,7 @@ def dashboard():
    return render_template("debt-dashboard.html")'''
 
 
-@app.route('/simulation')
+@app.route('/timeline')
 @login_required
 def timeline():
   #debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
@@ -400,6 +400,7 @@ def timeline():
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
   report_month_percent_remainingBalance=calculate_TimeLine_to_pay_off(debts, monthly_budget)
   return render_template("timeline.html",noMonthsNeeded=noMonthsNeeded,report_month_percent_remainingBalance=report_month_percent_remainingBalance)
+
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -508,6 +509,8 @@ def logout():
     #db.session.commit()
     logout_user()
     return redirect('/home')
+
+
 
 @app.route('/debt-dashboard')
 @login_required
