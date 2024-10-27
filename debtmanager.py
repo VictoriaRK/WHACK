@@ -72,14 +72,11 @@ def resetdb():
     return redirect('/')
 
 
-#route to the index
+#route to the log-in page as the default
 @app.route('/')
 def index():
   return redirect('/log-in')
-    # with open('README.md') as readme:
-    #   with open('requirements.txt') as req:
-    #     return render_template('index.html', README=readme.read(), requirements=req.read())
-
+    
 
 
 #sends an email 
@@ -387,12 +384,6 @@ def home():
   return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
   return render_template("debt-dashboard.html")
 
-@app.route('/debt-dashboard')
-@login_required
-def dashboard():
-   return render_template("debt-dashboard.html")
-
-
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -513,7 +504,7 @@ def showlogs():
     return render_template('show-logs.html', logs=logs)
   return render_template('/home')'''
 
-@app.route('/debt-dash')
+@app.route('/debt-dashboard')
 @login_required
 def dept_dash():
   debts = Debts.query.filter_by(username=current_user.username).all()
