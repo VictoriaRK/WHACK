@@ -52,6 +52,9 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 
+
+
+
 resetdb = False # won't reset the database every time it is closed
 if resetdb:
     with app.app_context():
@@ -209,14 +212,6 @@ def view_ticket():
 
 
 
-# def make_barcode(data, barcode_format, options=None):
-#     # Get the barcode class corresponding to the specified format 
-#     barcode_class = barcode.get_barcode_class(barcode_format)
-#     # Create a barcode image using the provided data and format
-#     barcode_image = barcode_class(data, writer=ImageWriter())
-#     # Save the barcode image to a file named "barcode" with the specified options
-#     barcode_image.save("", options="code128")
-
 
 
 
@@ -227,7 +222,7 @@ def view_ticket():
     
 
 
-#TODO make qr code
+
 #The user can book an event. A ticket will be created for them, or if they had previously cancelled the event, their old ticket will become available again.
 # A confirmation email will be sent to the user.
 #If bookings are near capacity, the superuser is notified via email.
@@ -528,7 +523,7 @@ def showlogs():
 
 
 
-
+#returns all the user debts along with their expenses and income to be rendered and displayed
 @app.route('/debt-dash')
 @login_required
 def dept_dash():
