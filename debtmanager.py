@@ -402,6 +402,7 @@ def timeline():
   return render_template("timeline.html",noMonthsNeeded=noMonthsNeeded,report=report_month_percent_remainingBalance)
 
 
+
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
 
 # The email of the forgotten password is sent a link with a token if the email is in the database.
@@ -508,6 +509,8 @@ def logout():
     #db.session.commit()
     logout_user()
     return redirect('/home')
+
+
 
 @app.route('/debt-dashboard')
 @login_required
