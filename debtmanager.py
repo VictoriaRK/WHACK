@@ -364,6 +364,7 @@ def editevent():
 # show some of their events and some of the events they haven't booked
 # There is a button to see more events
 @app.route('/home')
+@login_required
 def home():
   '''events = Events.query.all()
   count = 0
@@ -389,7 +390,14 @@ def home():
         new_events.append(event)
         count += 1
   return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
-  return render_template("index.html")
+  return render_template("debt-dashboard.html")
+
+@app.route('/debt-dashboard')
+@login_required
+def dashboard():
+   return render_template("debt-dashboard.html")
+
+
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -436,8 +444,8 @@ def save_password_reset():
 # If they do not, the details are saved, and an email is sent.
 @app.route('/register', methods=["GET", "POST"])
 def register():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method=="GET":
     return render_template("register.html")
@@ -464,8 +472,8 @@ def register():
 # The user can log in via email or username so they are both checked.
 @app.route('/log-in', methods=["GET", "POST"])
 def login():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method == "POST":
     name = request.form['name']
@@ -508,16 +516,7 @@ def showlogs():
   if current_user.is_super:
     logs = Logs.query.all()
     return render_template('show-logs.html', logs=logs)
-  return render_template('/home')
-
-
-
-
-
-
-
-
-
+  return render_template('/home')'''
 
 @app.route('/debt-dash')
 @login_required
@@ -534,7 +533,7 @@ def dept_dash():
 
 #adds the debt as a debt in the Debts db
 
-@app.route('add-debt', methods=['GET', 'POST'])
+@app.route('/add-debt', methods=['GET', 'POST'])
 @login_required
 def add_debt():
   if request.method == 'POST':
@@ -542,18 +541,18 @@ def add_debt():
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
-    chosen_due_date = request.form['due-date']
-    due_date= calculate_months_to_pay_off()
-    debt = Debts(current_user.id, name, amount, min_monthly_pay, interest, max_capacity, location, cancellable) #TODO: properly populate
+    chosen_due_date = request.form['chosen-due-date']
+    start_date = request.form['start-date']
+    due_date=request.form['due-date']
+    debt = Debts(id=current_user.id, name=type, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
-    db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-debt.html')
 
 
 #adds the expense to the user account
-@app.route('add-expenses', methods=['GET', 'POST'])
+@app.route('/add-expenses', methods=['GET', 'POST'])
 @login_required
 def add_expenses():
   if request.method == 'POST':
@@ -568,7 +567,7 @@ def add_expenses():
   return render_template('add-expenses.html')
 
 #adds the expense to the user account
-@app.route('add-income', methods=['GET', 'POST'])
+@app.route('/add-income', methods=['GET', 'POST'])
 @login_required
 def add_income():
   if request.method == 'POST':
@@ -584,7 +583,7 @@ def add_income():
 
 
 
-""" @app.route('/timeline', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST'])
 def create_user_with_debts():
     # Create a new user
     '''user = Users(username='user1', 
