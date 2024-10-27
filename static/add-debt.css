@@ -3,12 +3,13 @@
 /* Base Reset */
 * {
     box-sizing: border-box;
+
 }
 
 body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    background-color: #f5f6fa;
+    font-family: "Poppins", sans-serif;
+    color:  #1F2731;
+    background-color: #1F2731;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,49 +31,71 @@ body {
 /* Headings */
 h1 {
     font-size: 2rem;
-    color: #1e90ff;
+    color: #1F2731;
     margin-bottom: 15px;
     text-align: center;
+    font-family: "Poppins", sans-serif;
 }
+
 
 h2 {
     font-size: 1.5rem;
-    color: #333;
+    color: #1F2731;
     margin-bottom: 10px;
+    font-family: "Poppins", sans-serif;
 }
+
 
 /* Form Styling */
 form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #f9fafc;
+    background-color: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 1px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: "Poppins", sans-serif;
 }
 
-label {
+ form label {
+    font-family: "Poppins", sans-serif;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 5px; /* Set to 5px or adjust as needed */
+    color: #1F2731; /* Valid color */
 }
+
+
 
 input[type="number"],
 input[type="date"],
+input[type="text"], 
 select {
     width: 100%;
     padding: 12px;
     font-size: 1rem;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 15px;
+    color: #1F2731; 
     transition: border-color 0.2s;
+    font-family: "Poppins", sans-serif;
 }
 
 input[type="number"]:focus,
 input[type="date"]:focus,
+input[type="text"]:focus, /* Fix applied here */
 select:focus {
-    border-color: #1e90ff;
+    border-color: #1F2731;
     outline: none;
+}
+
+
+form label,
+form input[type="number"],
+form input[type="date"],
+form input[type="text"],
+form select {
+    color: #1F2731;
 }
 
 /* Submit Button */
@@ -81,15 +104,13 @@ input[type="submit"] {
     padding: 12px;
     font-size: 1rem;
     color: #fff;
-    background-color: #1e90ff;
+    background-color: red;
+    font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
+    font-family: "Poppins", sans-serif;
 
-input[type="submit"]:hover {
-    background-color: #1c86e5;
 }
 
 /* Spacer */
