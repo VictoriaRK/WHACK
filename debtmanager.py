@@ -23,6 +23,7 @@ from db_schema import db, Users, Incomes, Debts, Expenses, dbinit
 from barcode import EAN13
 from barcode.writer import ImageWriter 
 
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -507,33 +508,83 @@ def showlogs():
   if current_user.is_super:
     logs = Logs.query.all()
     return render_template('show-logs.html', logs=logs)
-  return render_template('/home')'''
+  return render_template('/home')
 
 
 
 
-#A query is sent with the searched value
-'''@app.route('/search', methods=['GET', 'POST'])
-def search():
-  query = request.form['query'].lower().replace(" ", "")
-  print(query)
-  return redirect(f'/searched?query={query}')
-
-#If the searched value is contained in an event name or it's information, it is shown here.
-#Otherwise, it will inform the user that no events match this
-@app.route('/searched', methods=['GET', 'POST'])
-def searched():
-  query = request.args.get('query')
-  events = Events.query.all()
-  show_events = []
-  for event in events:
-    if query in event.event_name.lower().replace(" ", "") or query in event.event_info.lower().replace(" ", ""):
-      show_events.append(event)
-  return render_template('searched.html', events=show_events)'''
 
 
 
-@app.route('/test', methods=['GET', 'POST'])
+
+
+
+@app.route('/debt-dash')
+@login_required
+def dept_dash():
+  debts = Debts.query.filter_by(username=current_user.username).all()
+  expense = Expenses.query.filter_by(username = current_user.username).first()
+  income = Incomes.query.filter_by(username = current_user.username).first()
+  return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
+
+
+
+#TODO: 
+#forall, adds algorithm to run to find duedate
+
+#adds the debt as a debt in the Debts db
+
+@app.route('add-debt', methods=['GET', 'POST'])
+@login_required
+def add_debt():
+  if request.method == 'POST':
+    type = request.form['type']
+    amount = float(request.form['amount'])
+    interest = float(request.form['interest'])
+    min_monthly_pay = float(request.form['minimum-monthly-payment'])
+    chosen_due_date = request.form['due-date']
+    due_date= calculate_months_to_pay_off()
+    debt = Debts(current_user.id, name, amount, min_monthly_pay, interest, max_capacity, location, cancellable) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-debt.html')
+
+
+#adds the expense to the user account
+@app.route('add-expenses', methods=['GET', 'POST'])
+@login_required
+def add_expenses():
+  if request.method == 'POST':
+    old = Expenses.query.filter_by(username = current_user.username).first()
+    db.session.delete(old)
+    amount = float(request.form['amount'])
+    debt = Expenses(current_user.id, name, amount, eclass) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-expenses.html')
+
+#adds the expense to the user account
+@app.route('add-income', methods=['GET', 'POST'])
+@login_required
+def add_income():
+  if request.method == 'POST':
+    old = Incomes.query.filter_by(username = current_user.username).first()
+    db.session.delete(old) 
+    amount = float(request.form['income'])
+    debt = Incomes(current_user.id, name, amount, iclass, ranges) #TODO: properly populate
+    db.session.add(debt)
+    db.session.commit()
+    db.session.commit()
+    return redirect('/debt-dashboard')
+  return render_template('add-income.html')
+
+
+
+""" @app.route('/timeline', methods=['GET', 'POST'])
 def create_user_with_debts():
     # Create a new user
     '''user = Users(username='user1', 

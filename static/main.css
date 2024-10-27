@@ -17,35 +17,112 @@ nav {
     color: white;
 }
 
+body {
+    background-color: yellow; /* Just for testing */
+}
+
+/* This makes it a line */ 
 a {
     text-decoration: none;
     cursor: pointer;
 }
+
 nav ul {
 	list-style: none;
-	margin-left: 10px;
+	margin: 0;
+    padding: 0;
+    display: flex; /* Displays items inline */
+    gap: 20px; /* Space between items */
 }
 nav ul li {
-	display: inline;
-	margin-right: 12px;
-	font-size: 18px;
-    padding: 2px;
-    float: center;
-    color: white;
-}
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+} 
+
+
+
 nav a {
-    text-transform: uppercase;
-    text-decoration: none;
-    display: block;
-    width: 60px;
-    display: inline;
-    padding-right: 5px;
-    padding-left: 5px;
+    position: relative;
+    display: inline-block;
+    padding: 10px 15px; 
     color: white;
+    text-decoration: none;
 }
-button :hover{
-    cursor: pointer;
+
+/* Span for underline effect */
+nav a span {
+    position: relative; /* Keeps span text visible */
+    z-index: 1; /* Keeps text above the underline */
 }
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px; 
+    background-color: red;
+    transform: scaleX(0); /* Hidden initially */
+    transform-origin: bottom right;
+    transition: transform 0.5s ease;
+}
+
+
+nav a:hover::after {
+    transform: scaleX(1); /* Full width on hover */
+    transform-origin: bottom left;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* my code 
+nav a {
+    position: relative;
+    font-size: 1.1em;
+    text-decoration: none;
+    padding: 6px 20px;
+    color: white;
+    transition: .5s;
+
+}
+nav a:hover{
+   color: red; 
+}
+
+
+nav a span {
+
+position: relative;
+top:0; 
+width:100%;
+height:100%;
+z-index: 1; 
+border-bottom: 2px solid red; 
+border-radius: 15px ;
+transform: scale(0) translateY(50px);
+transition: .5s;
+
+} */
+
 
 
 
