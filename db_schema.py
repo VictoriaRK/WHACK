@@ -91,9 +91,12 @@ def dbinit():
     db.create_all()
     # Create a new user
     user = Users(username='user1', 
-                 password_hash='hashed_password_example', 
+                 password_hash='password', 
                  email='user1@example.com', fname="bleh", lname='blah')
 
+    user = Users(username='abc', 
+                 password_hash='abc', 
+                 email='abc@example.com', fname="abc", lname='abc')
     # Add the user to the session
     db.session.add(user)
 
