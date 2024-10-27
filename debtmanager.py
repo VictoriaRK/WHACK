@@ -508,8 +508,6 @@ def logout():
     logout_user()
     return redirect('/home')
 
-
-
 @app.route('/debt-dashboard')
 @login_required
 def dept_dash():
@@ -521,7 +519,9 @@ def dept_dash():
   income = Incomes.query.filter_by(id=current_user.id).first()
   return render_template('debt-dashboard.html', debts=debts, expense=expense, income=income)
 
-
+@app.route('/budgeting-tips')
+def budgeting_tips():
+  return render_template('budgeting-tips.html')
 
 #TODO: properly date and string storage of date
 
@@ -535,6 +535,9 @@ def dept_dash():
 def add_debt():
   if request.method == 'POST':
     name = request.form['name']
+    q = Debts.query.filter_by(id=current_user.id, name=name).first()
+    if not q is None:
+       return "already used"
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
@@ -576,7 +579,7 @@ def add_income():
     old = Incomes.query.filter_by(id = current_user.id).first()
     if not old is None:
       db.session.delete(old) 
-    amount = float(request.form['income'])
+    amount = float(request.form['amount'])
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
     db.session.commit()
@@ -672,9 +675,17 @@ def debt_recalc():
   ex=0
   debts = Debts.query.filter_by(id=current_user.id).all()
   ex = Expenses.query.filter_by(id=current_user.id).first()
-  inc = Incomes.query.filter_by(id=current_user.id).first() 
+  if ex is None:
+    x = 0
+  else:
+    x = ex.amount
+  inc = Incomes.query.filter_by(id=current_user.id).first()
+  if inc is None:
+     i = 0
+  else:
+     i = inc.amount
   for debt in debts:
-    due_date=calculate_months_to_pay_off(debts, (inc-ex))
+    due_date=calculate_months_to_pay_off(debts, (i-x))
     debt.dueDate = due_date
   db.session.commit()
 
@@ -735,6 +746,8 @@ def calculate_months_to_pay_off(debts, monthly_budget):
         
         # Increment the month counter
         month += 1
+        if month > 1200:
+          return "ah bollocks, you're permanently in debt"
         
 
     return month
