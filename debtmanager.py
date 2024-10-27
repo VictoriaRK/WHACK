@@ -523,16 +523,11 @@ def add_debt():
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
     chosen_due_date = request.form['chosen-due-date']
     start_date = request.form['start-date']
-    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate="", chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
+    debt = Debts(id=current_user.id, name=name, amount=amount, minPayment=min_monthly_pay, interest=interest, startDate=start_date, dueDate=10, chosenDueDate=chosen_due_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
     db.session.commit()
     #recalculate all the debt due dates
-    debts = Debts.query.filter_by(id=current_user.id).all()
-    ex = Expenses.query.filter_by(id=current_user.id).first()
-    inc = Incomes.query.filter_by(id=current_user.id).first() 
-    for debt in debts:
-      due_date=calculate_months_to_pay_off(debts, (inc-ex))
-      debt.dueDate = due_date
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-debt.html')
@@ -549,6 +544,7 @@ def add_expenses():
     exp = Expenses(id=current_user.id, amount=amount) #TODO: properly populate
     db.session.add(exp)
     db.session.commit()
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-expenses.html')
@@ -564,6 +560,7 @@ def add_income():
     inc = Incomes(id=current_user.id, amount=amount)
     db.session.add(inc)
     db.session.commit()
+    debt_recalc()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-income.html')
@@ -639,7 +636,14 @@ def findToPayOff():
   return str(noMonthsNeeded)
 
 
-
+def debt_recalc():
+  debts = Debts.query.filter_by(id=current_user.id).all()
+  ex = Expenses.query.filter_by(id=current_user.id).first()
+  inc = Incomes.query.filter_by(id=current_user.id).first() 
+  for debt in debts:
+    due_date=calculate_months_to_pay_off(debts, (inc-ex))
+    debt.dueDate = due_date
+  db.session.commit()
 
 
   """

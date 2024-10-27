@@ -20,7 +20,7 @@ class Users(db.Model, UserMixin):
     fname = db.Column(db.String())
     lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
-    debt_budget = db.Column(db.Numeric(10,2))
+    # debt_budget = db.Column(db.Numeric(10,2))
                          
     def __init__(self, username, password_hash, fname, lname, email):
         self.username=username
@@ -55,7 +55,7 @@ class Debts(db.Model):
     minPayment = db.Column(db.Numeric(10,2))
     interest = db.Column(db.Numeric(5,2))
     startDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    dueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
+    dueDate = db.Column(db.Integer) # months until paid
     chosenDueDate = db.Column(db.String(), default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) # user input
     # accruedAnnualInterest = db.Column(db.Numeric(10,2), default=0.0)
     # dclass = db.Column(db.String()) #weekly, monthly etc
