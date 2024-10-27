@@ -103,6 +103,7 @@ def dbinit():
     db.session.commit()
 
 #accruedAnnualInterest=0.00
+#removed?
     # Create different debts for the user
     debts = [
         Debts(id=0, name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
