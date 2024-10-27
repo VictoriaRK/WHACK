@@ -38,7 +38,7 @@ login_manager.login_view = "login"
 
 
 #db = SQLAlchemy(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///eventbyte.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///debts.sqlite'
 
 app.config['SQL_TRACK_MODIFICATIONS'] = True
 
@@ -87,7 +87,7 @@ def sendemail(recipients, subject, body):
     sender = f"{os.getlogin()}@dcs.warwick.ac.uk"
     mail.send_message(sender=("NOREPLY",sender),subject=subject,body=body,recipients=recipients)
     #return make_response(f"<html><body><p>Sending your message to {recipients}</p></body></html>",200)
-
+'''
 #an event is added. Only the super user can add an event. They set the Event attributes as those from the form (validated via the HTML)
 #The event is emailed to the super user as confirmation
 @app.route('/add-event', methods=['GET', 'POST'])
@@ -354,15 +354,14 @@ def editevent():
     max_capacity=event.max_capacity,
     location = event.location,
     cancellable=event.cancellable
-  )
-
-
+  )'''
 
 # show some of their events and some of the events they haven't booked
 # There is a button to see more events
 @app.route('/home')
+@login_required
 def home():
-  events = Events.query.all()
+  '''events = Events.query.all()
   count = 0
   booked_events = []
   new_events = []
@@ -385,7 +384,15 @@ def home():
       else:
         new_events.append(event)
         count += 1
-  return render_template("home.html", new_events=new_events, booked_events=booked_events)
+  return render_template("home.html", new_events=new_events, booked_events=booked_events)'''
+  return render_template("debt-dashboard.html")
+
+@app.route('/debt-dashboard')
+@login_required
+def dashboard():
+   return render_template("debt-dashboard.html")
+
+
 
 
 s = Serializer(app.config['SECRET_KEY'], expires_in=1800)
@@ -432,8 +439,8 @@ def save_password_reset():
 # If they do not, the details are saved, and an email is sent.
 @app.route('/register', methods=["GET", "POST"])
 def register():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method=="GET":
     return render_template("register.html")
@@ -443,28 +450,25 @@ def register():
     email = request.form['email']
     fname = request.form['fname']
     lname = request.form['lname']
-    hashed_password = security.generate_password_hash(request.form['password'])
+    hashed_password = security.generate_password_hash(request.form['password'], method='pbkdf2:sha256', salt_length=16)
 
     tryusername = Users.query.filter_by(username=username).first()
     tryemail = Users.query.filter_by(username=email).first()
 
     if tryusername is None and tryemail is None:
-      new_user = Users(username=username, email=email, fname=fname, lname=lname, password_hash=hashed_password, is_super=False)
+      new_user = Users(username=username, email=email, fname=fname, lname=lname, password_hash=hashed_password)
       db.session.add(new_user)
       db.session.commit()
-      log = Logs(user_id=new_user.id, action=f"Registerred")
-      db.session.add(log)
-      db.session.commit()
       login_user(new_user)
-      sendemail(recipients=[email], subject="Welcome to EventByte!", body=f'Hello {fname}, \nWe\'re so happy you\'ve joined the EventByte family!\nStart exploring new events today to find your next adventure.\nFrom The EventByte Team')
+      sendemail(recipients=[email], subject="Welcome to Bollox United!", body=f'Hello {fname}, \nWe\'re so happy you\'ve joined the EventByte family!\nStart exploring new events today to find your next adventure.\nFrom The Bollox Team')
       return redirect('/home')
     return render_template("log-in.html")
 
 # The user can log in via email or username so they are both checked.
 @app.route('/log-in', methods=["GET", "POST"])
 def login():
-  if current_user.is_authenticated:
-    return redirect('/home')
+  #if current_user.is_authenticated:
+    #return redirect('/home')
 
   if request.method == "POST":
     name = request.form['name']
@@ -477,35 +481,29 @@ def login():
       if not security.check_password_hash(userbyname.password_hash, password):
         return render_template('log-in.html', failedlogin=True)
       login_user(userbyname)
-      log = Logs(user_id=current_user.id, action=f"Logged In")
-      db.session.add(log)
-      db.session.commit()
     if userbymail:
       if not security.check_password_hash(userbymail.password_hash, password):
         return render_template('log-in.html', failedlogin=True)
       login_user(userbymail)
-      log = Logs(user_id=current_user.id, action=f"Logged In")
-      db.session.add(log)
-      db.session.commit()
 
     return redirect('/home')
 
   if request.method=="GET":
     return render_template('log-in.html', failedlogin=False)
-    
+
 
 #logs out the user
 @app.route('/log-out')
 @login_required
 def logout():
-    log = Logs(user_id=current_user.id, action=f"Logged Out")
-    db.session.add(log)
-    db.session.commit()
+    #log = Logs(user_id=current_user.id, action=f"Logged Out")
+    #db.session.add(log)
+    #db.session.commit()
     logout_user()
     return redirect('/home')
 
 
-#update logs in all other functions
+'''#update logs in all other functions
 #they are shown here
 @app.route('/show-logs')
 @login_required
@@ -513,17 +511,8 @@ def showlogs():
   if current_user.is_super:
     logs = Logs.query.all()
     return render_template('show-logs.html', logs=logs)
-  return render_template('/home')
+  return render_template('/home')'''
 
-
-
-
-
-
-
-
-
-#returns all the user debts along with their expenses and income to be rendered and displayed
 @app.route('/debt-dash')
 @login_required
 def dept_dash():
@@ -539,7 +528,7 @@ def dept_dash():
 
 #adds the debt as a debt in the Debts db
 
-@app.route('add-debt', methods=['GET', 'POST'])
+@app.route('/add-debt', methods=['GET', 'POST'])
 @login_required
 def add_debt():
   if request.method == 'POST':
@@ -547,18 +536,18 @@ def add_debt():
     amount = float(request.form['amount'])
     interest = float(request.form['interest'])
     min_monthly_pay = float(request.form['minimum-monthly-payment'])
-    chosen_due_date = request.form['due-date']
-    due_date= calculate_months_to_pay_off()
-    debt = Debts(current_user.id, name, amount, min_monthly_pay, interest, max_capacity, location, cancellable) #TODO: properly populate
+    chosen_due_date = request.form['chosen-due-date']
+    start_date = request.form['start-date']
+    due_date=request.form['due-date']
+    debt = Debts(id=current_user.id, name=type, amount=amount, minPayment=min_monthly_pay, interest=interest, dueDate=due_date, chosenDueDate=chosen_due_date, startDate=start_date)#max_capacity, location, cancellable) #TODO: properly populate
     db.session.add(debt)
-    db.session.commit()
     db.session.commit()
     return redirect('/debt-dashboard')
   return render_template('add-debt.html')
 
 
 #adds the expense to the user account
-@app.route('add-expenses', methods=['GET', 'POST'])
+@app.route('/add-expenses', methods=['GET', 'POST'])
 @login_required
 def add_expenses():
   if request.method == 'POST':
@@ -573,7 +562,7 @@ def add_expenses():
   return render_template('add-expenses.html')
 
 #adds the expense to the user account
-@app.route('add-income', methods=['GET', 'POST'])
+@app.route('/add-income', methods=['GET', 'POST'])
 @login_required
 def add_income():
   if request.method == 'POST':
@@ -589,18 +578,24 @@ def add_income():
 
 
 
-""" @app.route('/timeline', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST'])
 def create_user_with_debts():
     # Create a new user
-    user = Users(username='user1', 
-                 password_hash='hashed_password_example', 
-                 salt='salt_value_example', 
+    '''user = Users(username='user1', 
+                 password_hash='chachachachachachacha', 
+                 fname='bleh', 
+                 lname='bleeeeh', 
                  email='user1@example.com')
 
     # Add the user to the session
-    db.session.add(user)
+    db.session.add(user)'''
 
-    # Create different debts for the user
+    # Add debt_budget to user
+    record = Users.query.filter_by(username='user1').first()
+    record.debt_budget = 50000
+    db.session.commit()
+
+    '''# Create different debts for the user
     debts = [
         Debts(username='user1', name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
                startDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
@@ -635,20 +630,21 @@ def create_user_with_debts():
 
     # Add each debt to the session
     for debt in debts:
-        db.session.add(debt)
+        db.session.add(debt)'''
 
     # Commit the session to save the user and debts in the database
-    db.session.commit() """
+    #db.session.commit()
+    return "bleh :)"
 
 
 @app.route('/timeline', methods=['GET', 'POST'])
+@login_required
 def findToPayOff():
-  debts=debts.query.filter(debts.user_id == current_user.id,debts.balance>0).order_by(accruedAnnualInterest.asc())
+  debts = Debts.query.filter_by(username="user1").order_by(Debts.accruedAnnualInterest.asc())
   # Fetch  current user's budget directly from the User table
-  monthly_budget = Users.query.filter(User.id == current_user.id).first().monthly_budget
-
+  monthly_budget = Users.query.filter_by(username="user1").first().debt_budget
   noMonthsNeeded=calculate_months_to_pay_off(debts, monthly_budget)
-  return noMonthsNeeded
+  return str(noMonthsNeeded)
 
 
 
@@ -671,10 +667,10 @@ def calculate_months_to_pay_off(debts, monthly_budget):
     
     debt_data = [
         {
-            'id': debt.id,
-            'balance': debt.balance,
+            #'id': debt.id,
+            'balance': debt.amount,
             'interest': debt.interest,
-            'effective_interest': debt.balance * debt.interest
+            'effective_interest': debt.amount * debt.interest/100
         }
         for debt in debts
     ]
@@ -698,14 +694,18 @@ def calculate_months_to_pay_off(debts, monthly_budget):
                 debt['balance'] -= budget
                 budget = 0  # Budget exhausted
                 break  # Exit loop if no budget is left
-
         # Apply interest to remaining debts for the next month
+        '''for i in range (0,len(debt_data)):
+           print()
+           debt_data[i]['balance'] *= (1 + debt_data[i]['interest']/100)
+           debt_data[i]['effective_interest'] = debt_data[i]['balance'] * debt_data[i]['interest']/100'''
+
         for debt in debt_data:
-            if debt['balance'] > 0:
-                debt['balance'] *= (1 + debt['interest'])
-                debt['effective_interest'] = debt['balance'] * debt['interest']
+            debt['balance'] *= (1 + debt['interest']/100)
+            debt['effective_interest'] = debt['balance'] * debt['interest']/100
         
         # Increment the month counter
         months += 1
+        
 
     return months

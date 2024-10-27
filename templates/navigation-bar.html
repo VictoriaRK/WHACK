@@ -13,32 +13,21 @@
 		
         <div id='content_wrapper'>
 
-
             <nav>
               <ul>
-              <li><a href='/home'><span>Home</span></a></li>
-              <li><a href="all-events"><span>All Events</span></a></li>
-                <!--{%
-                  if current_user.is_authenticated
-                  %}--> 
-                  
+                {% if current_user.is_authenticated %}
+                  <li><a href='/home'><span>Home</span></a></li>
                   <li><a href="budgeting-tips"><span>Budgeting Tips</span></a></li>
-                  <li><a href="budgeting-tips"><span>Debt Dashboard</span></a></li>
+                  <li><a href="debt-dashboard"><span>Debt Dashboard</span></a></li>
                   <li><a href="simulation"><span>Budget Timeline</span></a></li>   
-                 <!-- {% endif %} -->
                     
                  <li><a href='log-out'><span>Log Out</span></a></li>			
-                <!--{% else %} -->
+                {% else %}
                 <li><a href='log-in'><span>Log In</span></a></li>
                 <li><a href='register'><span>Register</span></a></li>
                   
-               <!-- {% endif %} -->
-                <li style="float: right; padding-right: 20px;"> <!--{% include "search.html" %}--> </li>
+               {% endif %}
                 </ul>
             </nav>
-
-
-            
-			<!--{% include "navigation-bar.html" %} --> 
 
 			

@@ -15,32 +15,6 @@
         
         
         <div id='content_wrapper'>
-
-
-            <nav>
-                <ul>
-                    <li><a href='/home'>Home</a></li>
-                    <li><a href="all-events">All Events</a></li>
-                {%
-                  if current_user.is_authenticated
-                  %}
-                  
-                  <li><a href="budgeting-tips">Budgeting Tips</a></li>
-                  <li><a href="budgeting-tips">Debt Dashboard</a></li>
-                  <li><a href="simulation">Budget Timeline</a></li>
-                    
-                  {% endif %}
-                    
-                  <li><a href='log-out'>Log Out</a></li>					
-                {% else %}
-                    <li><a href='log-in'>Log In</a></li>
-                    <li><a href='register'>Register</a></li>
-                {% endif %}
-                <li style="float: right; padding-right: 20px;">{% include "search.html" %}</li>
-                </ul>
-            </nav>
-
-
             
 			{% include "navigation-bar.html" %}
 
@@ -63,6 +37,8 @@
                     <p><label for="amount">Amount:</label> <input type = "number" name = "amount" placeholder="0.0" step="0.01" min="0" required/></p>
                     <p><label for="interest">Percentage Interest:</label> <input type = "number" name = "interest" placeholder="0.0" step="0.01" min="0" required/></p>
                     <p><label for="minimum-monthly-payment">Minimum Monthly Payment:</label> <input type = "number" placeholder="0.0" step="0.01" min="0" name = "minimum-monthly-payment" required/></p>
+                    <p><label for="start-date">Start Date (optional):</label><input type = "date" name = "start-date"/></p>
+                    <p><label for="chosen-due-date">Chosen Due Date (optional):</label><input type = "date" name = "chosen-due-date"/></p>
                     <p><label for="due-date">Due Date:</label><input type = "date" name = "due-date" required/></p>
                     <p><input type = "submit" value = "Add Debt" /></p>
                 </form>
