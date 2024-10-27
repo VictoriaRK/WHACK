@@ -8,9 +8,9 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    background-color: #f5f6fa;
+    font-family: "Poppins", sans-serif;
+    color: #1F2731;
+    background-color: #1F2731;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,35 +28,19 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Navigation Bar */
-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 20px;
-    background-color: #1e90ff;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    color: #fff;
-}
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-nav a:hover {
-    background-color: #1c86e5;
+/* Form Content */
+#content {
+    width: 100%;
 }
 
 /* Headings */
 h1 {
     font-size: 2rem;
-    color: #1e90ff;
+    color: #1F2731;
     margin-bottom: 15px;
     text-align: center;
+    font-family: "Poppins", sans-serif;
 }
 
 /* Debt Section */
@@ -70,9 +54,10 @@ h1 {
 }
 
 #debts h2, #income h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: #333;
     margin-bottom: 10px;
+    font-family: "Poppins", sans-serif;
 }
 
 /* Add Button Styling */
@@ -83,7 +68,7 @@ button {
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #1e90ff;
+    background-color: red;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -91,12 +76,8 @@ button {
 }
 
 button a {
-    color: #fff;
+    color: white;
     text-decoration: none;
-}
-
-button:hover {
-    background-color: #1c86e5;
 }
 
 /* Responsive Layout */

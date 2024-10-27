@@ -20,7 +20,7 @@ class Users(db.Model, UserMixin):
     fname = db.Column(db.String())
     lname = db.Column(db.String())
     email = db.Column(db.String(), unique=True)
-    # debt_budget = db.Column(db.Numeric(10,2))
+    debt_budget = db.Column(db.Numeric(10,2))
                          
     def __init__(self, username, password_hash, fname, lname, email):
         self.username=username
@@ -91,9 +91,12 @@ def dbinit():
     db.create_all()
     # Create a new user
     user = Users(username='user1', 
-                 password_hash='hashed_password_example', 
+                 password_hash='password', 
                  email='user1@example.com', fname="bleh", lname='blah')
 
+    user = Users(username='abc', 
+                 password_hash='abc', 
+                 email='abc@example.com', fname="abc", lname='abc')
     # Add the user to the session
     db.session.add(user)
 
@@ -102,6 +105,8 @@ def dbinit():
     record.debt_budget = 50000
     db.session.commit()
 
+#accruedAnnualInterest=0.00
+#removed?
     # Create different debts for the user
     debts = [
         Debts(id=0, name='Car Loan', amount=20000.00, minPayment=500.00, interest=5.00, 
